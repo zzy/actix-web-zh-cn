@@ -1,9 +1,28 @@
 [book]
-authors = ["zzy"]
-language = "en"
-multilingual = false
-src = "src"
 title = "actix-web 中文文档"
+authors = ["zzy"]
+language = "zh"
+description = "actix-web 中文文档, actix-web 实例示例, actix-web 实践指南"
+src = "src"
+multilingual = true
 
 [output.html]
 theme = "theme"
+# default-theme = "rust"
+git-repository-url = "https://github.com/zzy/actix-web-zh-cn"
+curly-quotes = true
+mathjax-support = true
+
+[output.html.playpen]
+editable = true
+copy-js = true
+
+[output.html.search]
+limit-results = 20
+use-boolean-and = true
+boost-title = 2
+boost-hierarchy = 2
+boost-paragraph = 1
+expand = true
+heading-split-level = 3
+copy-js = true
