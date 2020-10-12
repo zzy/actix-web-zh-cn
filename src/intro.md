@@ -1,91 +1,119 @@
-# Rust 实践指南
+# actix-web 中文文档
 
-<!--
-> [intro.md](https://github.com/rust-lang-nursery/rust-cookbook/blob/master/src/intro.md)
-> <br />
-> commit - a79932c9a624fd17977eaea5df3d5a9600d014f6 - 2018.12.05
--->
+actix-web 是 Rust 生态中的最为优秀的 web 框架之一，具有类型安全、功能丰富、扩展性强，以及速度极快的诸多优点。
 
-《Rust 实践指南》是 Rust 程序设计语言（[Rust 2018 简体中文版文档](https://rust-lang.budshome.com)）的简要实例示例集合：展示了在 Rust 生态系统中，使用各类 crate 来完成常见编程任务的良好实践。
+## 总览
 
-了解更多关于《Rust 实践指南》一书的信息，请阅读[关于本书](about.md)，包括：如何阅读本书的提示、如何使用实例示例，以及关于注释的约定。
+让我们通过 actix-web 的典型代码，来对其做一个整体认知。
 
-> 注：《Rust 实践指南》计划为两个阶段。<br>
-> 第一个阶段：经仔细斟酌，形成专业、通俗、容易理解的 Rust 生态实践指南中文版本；<br>
-> 第二个阶段：对书中代码进行详细讲解，在实际应用场景中对 Rust 生态 crate 进行分析、比较，以及拓展。<br>
-> 目前第一版，即处于第一阶段。
+```rust,edition2018,no_run
+use actix_web::{web, App, HttpRequest, HttpServer, Responder};
 
-## 做贡献
+async fn greet(req: HttpRequest) -> impl Responder {
+    let name = req.match_info().get("name").unwrap_or("World");
+    format!("Hello {}!", &name)
+}
 
-《Rust 实践指南》的目的是让 Rust 程序员新手能够更容易地参与到 Rust 社区中，因此它需要——并欢迎——你做出自己力所能及的贡献。
-
-### 构建和测试
-
-首先，从 git 克隆《Rust 实践指南》并进入目录：
-
-```
-git clone https://github.com/zzy/rust-cookbook-zh-cn.git
-cd rust-cookbook-zh-cn
-```
-
-《Rust 实践指南》使用 `mdBook`（[中文文档](https://mdbook.budshome.com)）构建，所以需要通过 `Cargo`（[中文文档](https://cargo.budshome.com)）安装它：
-
-```
-cargo install --version 0.3.5 mdbook
+#[actix_web::main]
+async fn main() -> std::io::Result<()> {
+    HttpServer::new(|| {
+        App::new()
+            .route("/", web::get().to(greet))
+            .route("/{name}", web::get().to(greet))
+    })
+    .bind("127.0.0.1:8080")?
+    .run()
+    .await
+}
 ```
 
-若要在本地生成和阅读《Rust 实践指南》，请运行：
+### 类型安全
 
+忘掉字符串类型的对象吧，从请求到响应，所有的数据信息都有类型。
+
+### 功能丰富
+
+actix 提供了诸多开箱即用的功能和特性，如 HTTP/2、日志记录等。
+
+### 扩展性强
+
+轻松创建自定义库，任何 actix 应用程序都可以无缝集成。
+
+### 速度极快
+
+Actix 具有极快的速度，请参见 [techempower 性能基准测试](https://www.techempower.com/benchmarks/#section=data-r19)。
+
+## 实践
+
+### 灵活响应
+
+actix 中的处理函数可以返回大量实现了 `Responder` trait 的对象，这使得从诸多 API 返回一致的响应变得轻而易举。
+
+```rust,edition2018,no_run
+#[derive(Serialize)]
+struct Measurement {
+    temperature: f32,
+}
+
+async fn hello_world() -> impl Responder {
+    "Hello World!"
+}
+
+async fn current_temperature() -> impl Responder {
+    web::Json(Measurement { temperature: 42.3 })
+}
 ```
-mdbook serve
+
+## 增强萃取
+
+actix 自实现了一个强大的提取器系统，可以从传入的 HTTP 请求中提取数据，并将其传递给视图函数。这不仅有助于实现一个简捷的 API，而且还意味着你的视图函数可以是同步代码，但仍然受益于异步 IO 处理。
+
+```rust,edition2018,no_run
+#[derive(Deserialize, Serialize)]
+struct Event {
+    id: Option<i32>,
+    timestamp: f64,
+    kind: String,
+    tags: Vec<String>,
+}
+
+async fn capture_event(evt: web::Json<Event>) -> impl Responder {
+    let new_event = store_in_db(evt.timestamp, &evt.kind, &evt.tags);
+    format!("got event {}", new_event.id.unwrap())
+}
 ```
 
-然后在浏览器中打开 `http://localhost:3000`，即可阅读本书。对源代码所做的任何更改都将自动重新生成页面，并会主动刷新浏览器，因此在编辑源码时打开浏览器窗口是很有帮助的。
+### 简便的表单处理
 
-书中的所有实例都是使用 [skeptic](https://github.com/brson/rust-skeptic) 测试的，它是测试任意 markdown 文档的工具，风格类似于 rustdoc。
+处理 multipart/urlencoded 表单数据很容易。只需定义一个可以反序列化的结构，actix 将处理其余部分。
 
-提交前，请对整个仓库进行测试：
+```rust,edition2018,no_run
+#[derive(Deserialize)]
+struct Register {
+    username: String,
+    country: String,
+}
 
+async fn register(form: web::Form<Register>) -> impl Responder {
+    format!("Hello {} from {}!", form.username, form.country)
+}
 ```
-cargo test
+
+### 具备请求路由
+
+actix 具备 URL 路由系统，可以匹配 URL 并调用各个处理程序。为了获得额外的灵活性，可以使用作用域。
+
+```rust,edition2018,no_run
+#[get("/")]
+async fn index(_req: HttpRequest) -> impl Responder {
+    "Hello from the index page!"
+}
+
+async fn hello(path: web::Path<String>) -> impl Responder {
+    format!("Hello {}!", &path)
+}
+
+let app = App::new()
+    .service(index)
+    .route("/{name}", web::get().to(hello));
 ```
-
-祝你学习愉快，欢迎提交问题，欢迎发送 PR。
-
-{{#include algorithms.md}}
-
-{{#include cli.md}}
-
-{{#include compression.md}}
-
-{{#include concurrency.md}}
-
-{{#include cryptography.md}}
-
-{{#include data_structures.md}}
-
-{{#include database.md}}
-
-{{#include datetime.md}}
-
-{{#include development_tools.md}}
-
-{{#include encoding.md}}
-
-{{#include errors.md}}
-
-{{#include file.md}}
-
-{{#include hardware.md}}
-
-{{#include mem.md}}
-
-{{#include net.md}}
-
-{{#include os.md}}
-
-{{#include science.md}}
-
-{{#include text.md}}
-
-{{#include web.md}}

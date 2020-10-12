@@ -1,13 +1,8 @@
----
-title: Documentation
-description: Guiding you through building web apps with Actix
-menu:
-  docs_intro:
-    name: Welcome
-weight: 10
----
-
 # Welcome to Actix
+
+> [intro.md](https://github.com/rust-lang-nursery/rust-cookbook/blob/master/src/intro.md)
+> <br />
+> commit - a79932c9a624fd17977eaea5df3d5a9600d014f6 - 2018.12.05
 
 Actix Web lets you quickly and confidently develop web services in Rust and this guide get you going
 in no time.
