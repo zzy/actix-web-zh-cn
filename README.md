@@ -3,11 +3,11 @@
 [Build Status travis]: https://api.travis-ci.com/zzy/actix-web-zh-cn.svg?branch=master
 [travis]: https://travis-ci.com/zzy/actix-web-zh-cn
 
-actix-web 是 Rust 生态中的 web 框架，具有类型安全、功能丰富、扩展性强，以及速度极快的诸多优点。
-
-**感谢 actix 团队的无私奉献！**
+actix-web 是 Rust 生态中的最为优秀的 web 框架之一，具有类型安全、功能丰富、扩展性强，以及速度极快的诸多优点。
 
 本仓库为《actix-web 中文文档》，同步、整理、实践，以及拓展自 actix 团队仓库和官网。
+
+**感谢 actix 团队的无私奉献！**
 
 ## 在线阅读
 
