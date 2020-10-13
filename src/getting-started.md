@@ -1,8 +1,8 @@
----
-title: Getting Started
-menu: docs_basics
-weight: 130
----
+# 入门指南
+
+> [getting-started.md](https://github.com/actix/actix-website/blob/master/content/docs/getting-started.md)
+> <br />
+> commit - 4d8d53cea59bca095ca5c02ef81f0b1791736855 - 2020.09.12
 
 ## Installing Rust
 
