@@ -1,5 +1,5 @@
 ---
-title: Websockets
+title: 
 menu: docs_protocols
 weight: 240
 ---
