@@ -1,10 +1,10 @@
----
-title: Application
-menu: docs_basics
-weight: 140
----
+# 编写应用程序
 
-# Writing an Application
+> [application.md](https://github.com/actix/actix-website/blob/master/content/docs/application.md)
+> <br />
+> commit - 4d8d53cea59bca095ca5c02ef81f0b1791736855 - 2020.09.12
+
+`actix-web` 提供了各种原语来构建具有Rust的web服务器和应用程序。它提供路由、中间件、请求的预处理、响应的后处理等。
 
 `actix-web` provides various primitives to build web servers and applications with Rust. It provides
 routing, middleware, pre-processing of requests, post-processing of responses, etc.
@@ -113,7 +113,7 @@ Each [`ServiceConfig`][serviceconfig] can have its own `data`, `routes`, and `se
 
 <!-- LINKS -->
 
-[usingappprefix]: /docs/url-dispatch/index.html#using-an-application-prefix-to-compose-applications
+[usingappprefix]: ./url-dispatch.md#使用作用域前缀
 [stateexample]: https://github.com/actix/examples/blob/master/state/src/main.rs
 [guardtrait]: https://docs.rs/actix-web/3/actix_web/guard/trait.Guard.html
 [guardfuncs]: https://docs.rs/actix-web/3/actix_web/guard/index.html#functions

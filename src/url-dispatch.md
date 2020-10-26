@@ -339,7 +339,7 @@ It is possible to register path normalization only for *GET* requests only:
 
 {{< include-example example="url-dispatch" file="norm2.rs" section="norm" >}}
 
-## Using an Application Prefix to Compose Applications
+## 使用作用域前缀
 
 The `web::scope()` method allows to set a specific application scope.  This scope represents
 a resource prefix that will be prepended to all resource patterns added by the resource
