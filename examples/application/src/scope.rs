@@ -5,10 +5,10 @@ async fn show_users(_req: HttpRequest) -> impl Responder {
     "unimplemented!"
 }
 
-// <scope>
+// ANCHOR: scope
 #[actix_web::main]
 async fn main() {
     let scope = web::scope("/users").service(show_users);
     App::new().service(scope);
 }
-// </scope>
+// ANCHOR_END: scope

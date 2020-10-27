@@ -4,7 +4,7 @@ menu: docs_advanced
 weight: 190
 ---
 
-# URL Dispatch
+# URL 调度
 
 URL dispatch provides a simple way for mapping URLs to handler code using a simple pattern
 matching language. If one of the patterns matches the path information associated with a request,

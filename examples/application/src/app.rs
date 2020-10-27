@@ -1,6 +1,6 @@
 #![allow(dead_code)]
 
-// <setup>
+// ANCHOR: setup
 use actix_web::{web, App, HttpServer, Responder};
 
 async fn index() -> impl Responder {
@@ -21,4 +21,4 @@ async fn main() -> std::io::Result<()> {
     .run()
     .await
 }
-// </setup>
+// ANCHOR_END: setup

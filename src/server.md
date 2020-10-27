@@ -1,9 +1,3 @@
----
-title: Server
-menu: docs_basics
-weight: 150
----
-
 # The HTTP Server
 
 The [**HttpServer**][httpserverstruct] type is responsible for serving HTTP requests.

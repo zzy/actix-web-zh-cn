@@ -1,6 +1,6 @@
 use actix_web::{guard, web, App, HttpResponse, HttpServer};
 
-// <vh>
+// ANCHOR: vh
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
@@ -21,4 +21,4 @@ async fn main() -> std::io::Result<()> {
     .run()
     .await
 }
-// </vh>
+// ANCHOR_END: vh

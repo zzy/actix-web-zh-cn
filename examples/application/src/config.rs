@@ -1,6 +1,6 @@
 #![allow(dead_code)]
 
-// <config>
+// ANCHOR: config
 use actix_web::{web, App, HttpResponse, HttpServer};
 
 // this function could be located in a different module
@@ -33,4 +33,4 @@ async fn main() -> std::io::Result<()> {
     .run()
     .await
 }
-// </config>
+// ANCHOR_END: config

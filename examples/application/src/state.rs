@@ -1,4 +1,4 @@
-// <setup>
+// ANCHOR: setup
 use actix_web::{get, web, App, HttpServer};
 
 // This struct represents state
@@ -12,9 +12,9 @@ async fn index(data: web::Data<AppState>) -> String {
 
     format!("Hello {}!", app_name) // <- response with app_name
 }
-// </setup>
+// ANCHOR_END: setup
 
-// <start_app>
+// ANCHOR: start_app
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
@@ -28,4 +28,4 @@ async fn main() -> std::io::Result<()> {
     .run()
     .await
 }
-// </start_app>
+// ANCHOR_END: setup

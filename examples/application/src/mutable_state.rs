@@ -1,4 +1,4 @@
-// <setup_mutable>
+// ANCHOR: setup_mutable
 use actix_web::{web, App, HttpServer};
 use std::sync::Mutex;
 
@@ -12,9 +12,9 @@ async fn index(data: web::Data<AppStateWithCounter>) -> String {
 
     format!("Request number: {}", counter) // <- response with count
 }
-// </setup_mutable>
+// ANCHOR_END: setup_mutable
 
-// <make_app_mutable>
+// ANCHOR: make_app_mutable
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     let counter = web::Data::new(AppStateWithCounter {
@@ -32,4 +32,4 @@ async fn main() -> std::io::Result<()> {
     .run()
     .await
 }
-// </make_app_mutable>
+// ANCHOR_END: make_app_mutable
