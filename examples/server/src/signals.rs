@@ -1,4 +1,4 @@
-// <signals>
+// ANCHOR: signals
 use actix_web::{web, App, HttpResponse, HttpServer, rt::System};
 use std::sync::mpsc;
 use std::thread;
@@ -23,11 +23,11 @@ async fn main() {
 
     let srv = rx.recv().unwrap();
 
-    // pause accepting new connections
+    // 暂停接受传入的连接
     srv.pause().await;
-    // resume accepting new connections
+    // 重新开始接受传入的连接
     srv.resume().await;
-    // stop server
+    // 停止服务器
     srv.stop(true).await;
 }
-// </signals>
+// ANCHOR_END: signals

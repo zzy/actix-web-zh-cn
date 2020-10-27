@@ -4,7 +4,7 @@ pub mod signals;
 pub mod ssl;
 pub mod workers;
 
-// <main>
+// ANCHOR: main
 use actix_web::{web, App, HttpResponse, HttpServer};
 
 #[actix_web::main]
@@ -16,4 +16,4 @@ async fn main() -> std::io::Result<()> {
     .run()
     .await
 }
-// </main>
+// ANCHOR_END: main

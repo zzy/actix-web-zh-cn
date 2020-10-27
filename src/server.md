@@ -1,82 +1,73 @@
-# The HTTP Server
+# HTTP 服务器
 
-The [**HttpServer**][httpserverstruct] type is responsible for serving HTTP requests.
+> [server.md](https://github.com/actix/actix-website/blob/master/content/docs/server.md)
+> <br />
+> commit - 4d8d53cea59bca095ca5c02ef81f0b1791736855 - 2020.09.12
 
-`HttpServer` accepts an application factory as a parameter, and the application factory
-must have `Send` + `Sync` boundaries. More about that in the *multi-threading* section.
+[**HttpServer**][httpserverstruct] 类型负责为 HTTP 请求提供服务。
 
-To bind to a specific socket address, [`bind()`][bindmethod] must be used, and it may be
-called multiple times. To bind ssl socket, [`bind_openssl()`][bindopensslmethod] or
-[`bind_rustls()`][bindrusttls] should be used. To run the HTTP server, use the `HttpServer::run()`
-method.
+`HttpServer` 接受应用程序工厂作为参数，并且应用程序工厂必须具有 `Send` + `Sync` 约束。在[“多线程”](#多线程)一节有更多信息。
 
-{{< include-example example="server" section="main" >}}
+- 要绑定到特定的套接字（socket）地址，必须使用 [`bind()`][bindmethod] 方法，并且可以多次调用它。
+- 要绑定 ssl 套接字（socket），应使用 [`bind_openssl()`][bindopensslmethod] 方法或者
+[`bind_rustls()`][bindrusttls] 方法。
+- 要运行 HTTP 服务器，请使用 `HttpServer::run()` 方法。
 
-The `run()` method returns an instance of the [`Server`][server] type. Methods of server type
-could be used for managing the HTTP server
+```rust,edition2018,no_run,noplaypen
+{{#include ../examples/server/src/main.rs:main}}
+```
 
-- `pause()` - Pause accepting incoming connections
-- `resume()` - Resume accepting incoming connections
-- `stop()` - Stop incoming connection processing, stop all workers and exit
+`run()` 方法返回 [`Server`][server] 类型的实例，`Server` 类型的方法可用于管理 HTTP 服务器：
 
-The following example shows how to start the HTTP server in a separate thread.
+- `pause()` - 暂停接受传入的连接
+- `resume()` - 重新开始接受传入的连接
+- `stop()` - 停止处理传入的连接，停止所有工作线程，并退出
 
-{{< include-example example="server" file="signals.rs" section="signals" >}}
+下面的示例展示了如何在独立的线程中启动 HTTP 服务器。
 
-## Multi-threading
+```rust,edition2018,no_run,noplaypen
+{{#include ../examples/server/src/signals.rs:signals}}
+```
 
-`HttpServer` automatically starts a number of HTTP *workers*, by default this number is
-equal to the number of logical CPUs in the system. This number can be overridden with the
-[`HttpServer::workers()`][workers] method.
+## 多线程
 
-{{< include-example example="server" file="workers.rs" section="workers" >}}
+`HttpServer` 会自动启动多个 HTTP 工作线程（worker），默认情况下，线程的数量等于系统中逻辑 CPU 的数量。线程的数量可以用 [`HttpServer::workers()`][workers] 方法重写。
 
-Once the workers are created, they each receive a separate *application* instance to handle
-requests. Application state is not shared between the threads, and handlers are free to manipulate
-their copy of the state with no concurrency concerns.
+```rust,edition2018,no_run,noplaypen
+{{#include ../examples/server/src/workers.rs:workers}}
+```
 
-> Application state does not need to be `Send` or `Sync`, but application
-factory must be `Send` + `Sync`.
+一旦创建了线程（worker），每个线程（worker）都会收到一个独立的 App（应用程序）实例，每个 App 实例都可以处理请求。应用程序状态（state）在线程之间不能共享，但处理程序可以自由地操作其状态副本，而无需担心并发性问题。
 
-To share state between worker threads, use an `Arc`. Special care should be taken once sharing and
-synchronization are introduced. In many cases, performance costs are inadvertently introduced as a
-result of locking the shared state for modifications.
+> 应用程序状态（state）不需要具有 `Send` 或者 `Sync` 约束，但应用程序工厂必须具有 `Send` + `Sync` 约束。
 
-In some cases these costs can be alleviated using more efficient locking strategies, for example
-using [read/write locks](https://doc.rust-lang.org/std/sync/struct.RwLock.html) instead of
-[mutexes](https://doc.rust-lang.org/std/sync/struct.Mutex.html) to achieve non-exclusive locking,
-but the most performant implementations often tend to be ones in which no locking occurs at all.
+要在工作线程之间共享状态，要使用 `Arc（原子引用计数器）`。一旦引入共享和同步，应格外小心。在许多情况下，由于锁定共享状态以对其进行修改，会无意中引入性能成本。
 
-Since each worker thread processes its requests sequentially, handlers which block the current
-thread will cause the current worker to stop processing new requests:
+在某些情况下，使用更有效的锁定策略可以降低这些性能成本。例如，使用[读/写锁](https://doc.rust-lang.org/std/sync/struct.RwLock.html)而不是[互斥器（mutexes）](https://doc.rust-lang.org/std/sync/struct.Mutex.html)来实现非互斥锁，但最具性能的实现，往往是根本不发生锁定的实现。
 
-```rust
+由于每个工作线程都是按顺序处理其请求的，因此当处理程序阻塞当前线程时，将导致当前工作线程停止处理新请求：
+
+```rust,edition2018,no_run,noplaypen
 fn my_handler() -> impl Responder {
     std::thread::sleep(Duration::from_secs(5)); // <-- Bad practice! Will cause the current worker thread to hang!
     "response"
 }
 ```
 
-For this reason, any long, non-cpu-bound operation (e.g. I/O, database operations, etc.) should be
-expressed as futures or asynchronous functions. Async handlers get executed concurrently by worker
-threads and thus don't block execution:
+因上述原因，任何长时间的、非 cpu 限制的操作（例如，I/O、数据库操作等）都应该使用 `future` 函数或异步函数。异步处理程序由工作线程并发执行，因此不会发生阻塞：
 
-```rust
+```rust,edition2018,no_run,noplaypen
 async fn my_handler() -> impl Responder {
     tokio::time::delay_for(Duration::from_secs(5)).await; // <-- Ok. Worker thread will handle other requests here
     "response"
 }
 ```
 
-The same limitation applies to extractors as well. When a handler function receives an argument
-which implements `FromRequest`, and that implementation blocks the current thread, the worker thread
-will block when running the handler. Special attention must be given when implementing extractors
-for this very reason, and they should also be implemented asynchronously where needed.
+同样的限制也适用于提取器（extractor）。当处理程序函数接收到实现了 `FromRequest` 的参数，并且该实现阻塞当前线程时，工作线程也将在运行时发生阻塞。因此，在实现提取器（extractor）时必须特别注意，而且在需要时也应该异步地实现它们。
 
 ## SSL
 
-There are two features for the ssl server: `rustls` and `openssl`. The `rustls` feature is for
-`rustls` integration and `openssl` is for `openssl`.
+ssl 服务器有两个实现：`rustls` 和 `openssl`。`rustls` 集成在 Rust 程序设计语言新开发的 TLS 库 `rustls`，`openssl` 用于开源的 TLS 业界标准库 `openssl`。
 
 ```toml
 [dependencies]

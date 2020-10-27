@@ -1,4 +1,4 @@
-// <workers>
+// ANCHOR: workers
 use actix_web::{web, App, HttpResponse, HttpServer};
 
 #[actix_web::main]
@@ -8,4 +8,4 @@ async fn main() {
     })
     .workers(4); // <- Start 4 workers
 }
-// </workers>
+// ANCHOR_END: workers
