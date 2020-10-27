@@ -1,4 +1,4 @@
-// <example>
+// ANCHOR: example
 use actix_web::{http, HttpRequest, HttpResponse};
 
 async fn index(req: HttpRequest) -> HttpResponse {
@@ -7,7 +7,7 @@ async fn index(req: HttpRequest) -> HttpResponse {
         .force_close() // <- Alternative method
         .finish()
 }
-// </example>
+// ANCHOR_END: example
 
 // ConnectionType::Close
 // ConnectionType::KeepAlive

@@ -1,6 +1,6 @@
 #![allow(dead_code)]
 
-// <ssl>
+// ANCHOR: ssl
 use actix_web::{get, App, HttpRequest, HttpServer, Responder};
 use openssl::ssl::{SslAcceptor, SslFiletype, SslMethod};
 
@@ -25,4 +25,4 @@ async fn main() -> std::io::Result<()> {
         .run()
         .await
 }
-// </ssl>
+// ANCHOR_END: ssl

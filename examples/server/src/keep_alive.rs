@@ -1,4 +1,4 @@
-// <keep-alive>
+// ANCHOR: keep-alive
 use actix_web::{web, App, HttpResponse, HttpServer};
 
 #[actix_web::main]
@@ -20,4 +20,4 @@ async fn main() -> std::io::Result<()> {
 
     one.bind("127.0.0.1:8080")?.run().await
 }
-// </keep-alive>
+// ANCHOR_END: keep-alive

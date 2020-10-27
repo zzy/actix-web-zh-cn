@@ -75,43 +75,48 @@ actix-web = { version = "{{< actix-version "actix-web" >}}", features = ["openss
 openssl = { version="0.10" }
 ```
 
-{{< include-example example="server" file="ssl.rs" section="ssl" >}}
+```rust,edition2018,no_run,noplaypen
+{{#include ../examples/server/src/ssl.rs:ssl}}
+```
 
-> **Note**: the *HTTP/2.0* protocol requires [tls alpn][tlsalpn].
-> At the moment, only `openssl` has `alpn` support.
-> For a full example, check out [examples/openssl][exampleopenssl].
+> **注意**：*HTTP/2.0* 需要 [tls alpn][tlsalpn] 协议支持。目前，仅有 `openssl` 支持 `alpn` 协议。完整实例请查看 [examples/openssl][exampleopenssl]。
 
-To create the key.pem and cert.pem use the command. **Fill in your own subject**
+使用命令创建 key.pem 和 cert.pem，注意**填写你自己的主题**：
+
 ```bash
 $ openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem \
   -days 365 -sha256 -subj "/C=CN/ST=Fujian/L=Xiamen/O=TVlinux/OU=Org/CN=muro.lxd"
 ```
-To remove the password, then copy nopass.pem to key.pem
+
+移除密码，然后将 nopass.pem 复制到 key.pem：
+
 ```bash
 $ openssl rsa -in key.pem -out nopass.pem
 ```
 
 ## Keep-Alive
 
-Actix can wait for requests on a keep-alive connection.
+actix 可以在 keep-alive 连接上等待请求。
 
-> *keep alive* connection behavior is defined by server settings.
+> *keep-alive* 连接行为由服务器设置定义：
 
-- `75`, `Some(75)`, `KeepAlive::Timeout(75)` - enable 75 second *keep alive* timer.
-- `None` or `KeepAlive::Disabled` - disable *keep alive*.
-- `KeepAlive::Tcp(75)` - use `SO_KEEPALIVE` socket option.
+- `75`、`Some(75)`、`KeepAlive::Timeout(75)` - 开启 *keep-alive* 保活时间为 75 秒。
+- `None` 或者 `KeepAlive::Disabled` - 关闭 *keep-alive*。
+- `KeepAlive::Tcp(75)` - 使用 `SO_KEEPALIVE` 套接字选项。
 
-{{< include-example example="server" file="keep_alive.rs" section="keep-alive" >}}
+```rust,edition2018,no_run,noplaypen
+{{#include ../examples/server/src/keep_alive.rs:keep-alive}}
+```
 
-If the first option above is selected, then *keep alive* state is calculated based on the
-response's *connection-type*. By default `HttpResponse::connection_type` is not
-defined. In that case *keep alive* is defined by the request's HTTP version.
+如果选择了上面的第一个选项，则根据响应的 *connection-type* 计算 *keep alive* 状态。默认情况下，`HttpResponse::connection_type` 是未定义的，*keep-alive* 状态由请求的 HTTP 版本定义。
 
-> *keep alive* is **off** for *HTTP/1.0* and is **on** for *HTTP/1.1* and *HTTP/2.0*.
+> 对于 *HTTP/1.0*，*keep-alive* 默认**关闭**；对于 *HTTP/1.1* 和 *HTTP/2.0*，*keep-alive* 默认**开启**。
 
-*Connection type* can be changed with `HttpResponseBuilder::connection_type()` method.
+可以使用 `HttpResponseBuilder::connection_type()` 方法更改 *connection-type*。
 
-{{< include-example example="server" file="keep_alive_tp.rs" section="example" >}}
+```rust,edition2018,no_run,noplaypen
+{{#include ../examples/server/src/keep_alive_tp.rs:example}}
+```
 
 ## Graceful shutdown
 
