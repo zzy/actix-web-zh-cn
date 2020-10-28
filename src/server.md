@@ -118,26 +118,19 @@ actix 可以在 keep-alive 连接上等待请求。
 {{#include ../examples/server/src/keep_alive_tp.rs:example}}
 ```
 
-## Graceful shutdown
+## 正常关闭
 
-`HttpServer` supports graceful shutdown. After receiving a stop signal, workers
-have a specific amount of time to finish serving requests. Any workers still alive after the
-timeout are force-dropped. By default the shutdown timeout is set to 30 seconds.  You
-can change this parameter with the [`HttpServer::shutdown_timeout()`][shutdowntimeout]
-method.
+`HttpServer` 支持正常关闭。在收到停止信号后，工作线程分配一定的时间来完成服务请求。超时后，任何仍然存活的工作线程都将被强制丢弃。默认情况下，关机超时设置为 30 秒，可以使用 [`HttpServer::shutdown_timeout()`][shutdowntimeout] 方法更改此参数。
 
-You can send a stop message to the server with the server address and specify if you want
-graceful shutdown or not. The [`start()`][startmethod] method returns the address of the server.
+你可以通过服务器地址向服务器发送停止消息，并指明是否要正常关闭。`Server` 类型有 [`start()`][startmethod] 方法，可以返回服务器地址。
 
-`HttpServer` handles several OS signals. *CTRL-C* is available on all OSs, other signals
-are available on unix systems.
+`HttpServer` 会处理多个操作系统信号。其中 *CTRL-C* 可用于所有操作系统，其他信号可用于 unix 系统。
 
-- *SIGINT* - Force shutdown workers
-- *SIGTERM* - Graceful shutdown workers
-- *SIGQUIT* - Force shutdown workers
+- *SIGINT* - 强制关闭工作线程
+- *SIGTERM* - 正常关闭工作线程
+- *SIGQUIT* - 强制关闭工作线程
 
-> It is possible to disable signal handling with
-[`HttpServer::disable_signals()`][disablesignals] method.
+> 使用 [`HttpServer::disable_signals()`][disablesignals] 方法可以禁用信号处理。
 
 [server]: https://docs.rs/actix-web/3/actix_web/dev/struct.Server.html
 [httpserverstruct]: https://docs.rs/actix-web/3/actix_web/struct.HttpServer.html
