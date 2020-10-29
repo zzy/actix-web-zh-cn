@@ -1,77 +1,75 @@
----
-title: Handlers
-menu: docs_basics
-weight: 160
----
+# 请求处理
 
-# Request Handlers
+> [handlers.md](https://github.com/actix/actix-website/blob/master/content/docs/handlers.md)
+> <br />
+> commit - 4d8d53cea59bca095ca5c02ef81f0b1791736855 - 2020.09.12
 
-A request handler is an async function that accepts zero or more parameters that can be extracted
-from a request (ie, [*impl FromRequest*][implfromrequest]) and returns a type that can
-be converted into an HttpResponse (ie, [*impl Responder*][respondertrait]).
+请求处理程序是异步函数，它接受零个或多个参数，这些参数可以从请求中提取（即实现了 `FromRequest` trait，参见 [*impl FromRequest*][implfromrequest]），并返回可以转换为 `HttpResponse` 的类型（即实现了  `Responder` trait，参见[*impl Responder*][respondertrait]）。
 
-Request handling happens in two stages. First the handler object is called, returning any
-object that implements the [*Responder*][respondertrait] trait. Then, `respond_to()` is
-called on the returned object, converting itself to a `HttpResponse` or `Error`.
+请求处理分为两个阶段。
 
-By default actix-web provides `Responder` implementations for some standard types,
-such as `&'static str`, `String`, etc.
+- 首先，调用处理程序对象，返回实现了 [*Responder*][respondertrait] trait 的任何对象。
+- 然后，对返回的对象调用 `respond_to()` 方法，将其自身转换为 `HttpResponse` 或者 `Error`。
 
-> For a complete list of implementations, check [*Responder documentation*][responderimpls].
+默认情况下，actix-web 为一些标准类型提供了 `Responder` trait 实现。例如，`&'static str`、`String` 等。
 
-Examples of valid handlers:
+> 已经实现 `Responder` trait 的类型，其完整清单请参见 [*Responder 文档*][responderimpls]。
 
-```rust
+请求处理程序示例： 
+
+```rust,edition2018,no_run,noplaypen
 async fn index(_req: HttpRequest) -> &'static str {
     "Hello world!"
 }
 ```
 
-```rust
+```rust,edition2018,no_run,noplaypen
 async fn index(_req: HttpRequest) -> String {
     "Hello world!".to_owned()
 }
 ```
 
-You can also change the signature to return `impl Responder` which works well if more
-complex types are involved.
+如果涉及到更复杂的类型，你还可以更改签名以返回比较好用的 `impl Responder`（实现 `Responder` trait）。
 
-```rust
+```rust,edition2018,no_run,noplaypen
 async fn index(_req: HttpRequest) -> impl Responder {
     Bytes::from_static(b"Hello world!")
 }
 ```
 
-```rust
+```rust,edition2018,no_run,noplaypen
 async fn index(req: HttpRequest) -> Box<Future<Item=HttpResponse, Error=Error>> {
     ...
 }
 ```
 
-## Response with custom type
+## 响应自定义类型
 
-To return a custom type directly from a handler function, the type needs to implement the `Responder` trait.
+要直接从处理程序函数返回自定义类型，则该类型需要实现 `Responder` trait。
 
-Let's create a response for a custom type that serializes to an `application/json` response:
+让我们为一个自定义类型创建响应，该类型将序列化为 `application/json` 响应：
 
-{{< include-example example="responder-trait" file="main.rs" section="responder-trait" >}}
+```rust,edition2018,no_run,noplaypen
+{{#include ../examples/responder-trait/src/main.rs:responder-trait}}
+```
 
-## Streaming response body
+## 流式响应体（body）
 
-Response body can be generated asynchronously. In this case, body must implement
-the stream trait `Stream<Item=Bytes, Error=Error>`, i.e:
+响应体可以异步生成。下述实例中，主体（body）必须实现 `stream` trait `Stream<Item=Bytes, Error=Error>`，即：
 
-{{< include-example example="async-handlers" file="stream.rs" section="stream" >}}
+```rust,edition2018,no_run,noplaypen
+{{#include ../examples/async-handlers/src/stream.rs:stream}}
+```
 
-## Different return types (Either)
+## 差异化返回类型（Either 枚举）
 
-Sometimes, you need to return different types of responses. For example, you can error
-check and return errors, return async responses, or any result that requires two different types.
+有时，你需要返回不同类型的响应。比如，你可以检查错误和返回错误：返回错误的异步响应，或者返回依赖于两个不同类型的任意结果（result）。
 
-For this case, the [Either][either] type can be used.  `Either` allows combining two
-different responder types into a single type.
+下述实例中，可以使用 [Either][either] 枚举类型，`Either` 允许将两种不同的响应类型组合成单一类型。
 
-{{< include-example example="either" file="main.rs" section="either" >}}
+```rust,edition2018,no_run,noplaypen
+{{#include ../examples/either/src/main.rs:either}}
+```
 
 [implfromrequest]: https://docs.rs/actix-web/3/actix_web/trait.FromRequest.html
 [respondertrait]: https://docs.rs/actix-web/3/actix_web/trait.Responder.html

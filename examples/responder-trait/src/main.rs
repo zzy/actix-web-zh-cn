@@ -1,4 +1,4 @@
-// <responder-trait>
+// ANCHOR: responder-trait
 use actix_web::{Error, HttpRequest, HttpResponse, Responder};
 use serde::Serialize;
 use futures::future::{ready, Ready};
@@ -26,7 +26,7 @@ impl Responder for MyObj {
 async fn index() -> impl Responder {
     MyObj { name: "user" }
 }
-// </responder-trait>
+// ANCHOR_END: responder-trait
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {

@@ -1,4 +1,4 @@
-// <stream>
+// ANCHOR: stream
 use actix_web::{get, App, Error, HttpResponse, HttpServer};
 use bytes::Bytes;
 use futures::future::ok;
@@ -20,4 +20,4 @@ async fn main() -> std::io::Result<()> {
         .run()
         .await
 }
-// </stream>
+// ANCHOR_END: stream

@@ -1,4 +1,4 @@
-// <either>
+// ANCHOR: either
 use actix_web::{Either, Error, HttpResponse};
 
 type RegisterResult = Either<HttpResponse, Result<&'static str, Error>>;
@@ -12,7 +12,7 @@ async fn index() -> RegisterResult {
         Either::B(Ok("Hello!"))
     }
 }
-// </either>
+// ANCHOR_END: either
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
