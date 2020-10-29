@@ -1,4 +1,4 @@
-// <arc>
+// ANCHOR: arc
 use actix_web::{get, web, App, HttpServer, Responder};
 use std::sync::atomic::{AtomicUsize, Ordering};
 use std::sync::Arc;
@@ -36,4 +36,4 @@ async fn main() -> std::io::Result<()> {
     .run()
     .await
 }
-// </arc>
+// ANCHOR_END: arc

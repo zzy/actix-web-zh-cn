@@ -1,5 +1,5 @@
 pub mod handlers_arc;
-// <data>
+// ANCHOR: data
 use actix_web::{web, Responder};
 use std::cell::Cell;
 
@@ -37,4 +37,4 @@ async fn main() -> std::io::Result<()> {
     .run()
     .await
 }
-// </data>
+// ANCHOR_END: data

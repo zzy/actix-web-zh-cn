@@ -1,4 +1,4 @@
-// <form>
+// ANCHOR: form
 use actix_web::{post, web, App, HttpServer, Result};
 use serde::Deserialize;
 
@@ -14,7 +14,7 @@ struct FormData {
 async fn index(form: web::Form<FormData>) -> Result<String> {
     Ok(format!("Welcome {}!", form.username))
 }
-// </form>
+// ANCHOR_END: form
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {

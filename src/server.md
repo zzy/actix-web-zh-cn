@@ -124,7 +124,7 @@ actix 可以在 keep-alive 连接上等待请求。
 
 你可以通过服务器地址向服务器发送停止消息，并指明是否要正常关闭。`Server` 类型有 [`start()`][startmethod] 方法，可以返回服务器地址。
 
-`HttpServer` 会处理多个操作系统信号。其中 *CTRL-C* 可用于所有操作系统，其他信号可用于 unix 系统。
+`HttpServer` 会处理多个操作系统信号。其中 *CTRL-C* 可用于所有操作系统，其它信号可用于 unix 系统。
 
 - *SIGINT* - 强制关闭工作线程
 - *SIGTERM* - 正常关闭工作线程

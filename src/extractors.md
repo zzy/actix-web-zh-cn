@@ -14,7 +14,7 @@ actix-web 提供了一个称之为*提取器*（extractor，`impl FromRequest`�
 
 # 路径（Path）
 
-[*路径（Path）*][pathstruct]是结构体类型，提供可从请求路径提取的信息，路径中的任何变量都可以反序列化。
+[*路径（Path）*][pathstruct]结构体提供可从请求路径提取的信息，路径中的任何变量都可以反序列化。
 
 举例来说，对于注册为 `/users/{user_id}/{friend}` 路径的资源，有两个变量可以被反序列化：`user_id` 和 `friend`。这些变量可以被提取到一个`元组（tuple）`中（如 `Path<(u32, String)>`），或者被提取到实现了 *serde* crate 中的 `Deserialize` trait 的任何结构中。
 
@@ -36,7 +36,7 @@ actix-web 提供了一个称之为*提取器*（extractor，`impl FromRequest`�
 
 # 查询（Query）
 
-[*查询（Query）*][querystruct]是结构体类型，为请求中的查询参数提供提取功能。下文的例子使用了 *serde_urlencoded* crate：
+[*查询（Query）*][querystruct]结构体为请求中的查询参数提供提取功能。下文的例子使用了 *serde_urlencoded* crate：
 
 ```rust,edition2018,no_run,noplaypen
 {{#include ../examples/extractors/src/query.rs:query}}
@@ -44,69 +44,63 @@ actix-web 提供了一个称之为*提取器*（extractor，`impl FromRequest`�
 
 # Json
 
-[*Json*][jsonstruct] allows deserialization of a request body into a struct. To extract
-typed information from a request's body, the type `T` must implement the `Deserialize`
-trait from *serde*.
+[*Json*][jsonstruct] 结构体允许将请求体反序列化为结构体。要从请求体中提取类型化的信息，则类型 `T` 必须实现 *serde* crate 中的 `Deserialize` trait。
 
-{{< include-example example="extractors" file="json_one.rs" section="json-one" >}}
+```rust,edition2018,no_run,noplaypen
+{{#include ../examples/extractors/src/json_one.rs:json-one}}
+```
 
-Some extractors provide a way to configure the extraction process. Json extractor
-[*JsonConfig*][jsonconfig] type for configuration. To configure an extractor, pass its
-configuration object to the resource's `.data()` method. In case of a *Json* extractor
-it returns a *JsonConfig*. You can configure the maximum size of the json payload as
-well as a custom error handler function.
+一些提取器提供了配置提取过程的方法，[*JsonConfig*][jsonconfig] 结构体用于配置 Json 提取器。要配置提取器，请将其配置对象传递给 `web::resource` 的 `.app_data()` 方法。配置后，*Json* 提取器将返回 *JsonConfig* 结构体。你也可以配置 json 有效负载的最大值，以及自定义错误处理函数。
 
-The following example limits the size of the payload to 4kb and uses a custom error handler.
+下面的示例中，将有效负载的大小限制为 4kb，并使用自定义的错误处理程序。
 
-{{< include-example example="extractors" file="json_two.rs" section="json-two" >}}
+```rust,edition2018,no_run,noplaypen
+{{#include ../examples/extractors/src/json_two.rs:json-two}}
+```
 
-# Form
+# 表单（Form）
 
-At the moment, only url-encoded forms are supported. The url-encoded body could be
-extracted to a specific type. This type must implement the `Deserialize` trait from
-the *serde* crate.
+目前，仅支持 url 编码的表单。url 编码的主体信息可以被提取为特定类型，此类型必须实现 *serde* crate 中的 `Deserialize` trait。
 
-[*FormConfig*][formconfig] allows configuring the extraction process.
+[*FormConfig*][formconfig] 结构体允许配置提取过程。
 
-{{< include-example example="extractors" file="form.rs" section="form" >}}
+```rust,edition2018,no_run,noplaypen
+{{#include ../examples/extractors/src/form.rs:form}}
+```
 
-# Other
+# 其它
 
-Actix-web also provides several other extractors:
+actix-web 还提供了其它几种提取器：
 
-* [*Data*][datastruct] - If you need access to an application state.
-* *HttpRequest* - *HttpRequest* itself is an extractor which returns self, in case you
-  need access to the request.
-* *String* - You can convert a request's payload to a *String*.  [*Example*][stringexample]
-  is available in doc strings.
-* *bytes::Bytes* - You can convert a request's payload into *Bytes*.
-  [*Example*][bytesexample]
-  is available in doc strings.
-* *Payload* - You can access a request's payload.
-  [*Example*][payloadexample]
+* [*Data*][datastruct] - 如果需要访问应用程序状态。
+* *HttpRequest* - *HttpRequest* 自身既是提取器，它返回 `self`，以便于你访问请求。
+* *String* - 你可以转换请求的有效负载为 *字符串（String）* 类型。请参阅文档字符串[*实例*][stringexample]。
+* *bytes::Bytes* - 你可以转换请求的有效负载为 *Bytes* 类型。请参阅文档字符串[*实例*][bytesexample]。
+* *Payload* - 你可以访问请求的有效负载。请参阅[*实例*][payloadexample]。
 
-# Application state extractor
+# 应用状态提取器
 
-Application state is accessible from the handler with the `web::Data` extractor;
-however, state is accessible as a read-only reference. If you need mutable access to state,
-it must be implemented.
+可以使用 `web::Data` 提取器，从请求处理程序访问应用程序状态；但是，状态仅可以作为只读引用访问。如果你需要对状态的可变（mutable）访问，则状态必须被实现。
 
-> **Beware**, actix creates multiple copies of the application state and the handlers. It creates
-> one copy for each thread.
+注意，actix
 
-Here is an example of a handler that stores the number of processed requests:
+> **注意**，actix 会创建应用程序状态和请求处理程序的多个副本，它为每个工作线程创建一个副本。
 
-{{< include-example example="request-handlers" file="main.rs" section="data" >}}
+下面是一个请求处理程序的示例，用于存储已处理的请求数：
 
-Although this handler will work, `self.0` will be different depending on the number of threads and
-number of requests processed per thread. A proper implementation would use `Arc` and `AtomicUsize`.
+```rust,edition2018,no_run,noplaypen
+{{#include ../examples/request-handlers/src/main.rs:data}}
+```
 
-{{< include-example example="request-handlers" file="handlers_arc.rs" section="arc" >}}
+尽管此处理程序可以运行，但依赖于线程数和每个线程处理的请求数因素，`self.0` 可能不正确。正确的实现应该使用 `Arc（原子引用计数器）` 和 `AtomicUsize`。
 
-> Be careful with synchronization primitives like `Mutex` or `RwLock`. The `actix-web` framework
-> handles requests asynchronously. By blocking thread execution, all concurrent
-> request handling processes would block. If you need to share or update some state
-> from multiple threads, consider using the tokio synchronization primitives.
+```rust,edition2018,no_run,noplaypen
+{{#include ../examples/request-handlers/src/handlers_arc.rs:arc}}
+```
+
+> `actix-web` 框架异步地处理请求，请小心使用诸如 `Mutex` 或者 `RwLock` 之类的同步原语。
+> 如果阻止了线程执行，所有并发请求处理进程都将阻塞。
+> 若你需要从多个线程共享或更新某些状态，请考虑使用 `tokio` crate 的同步原语。
 
 [pathstruct]: https://docs.rs/actix-web/3/actix_web/dev/struct.Path.html
 [querystruct]: https://docs.rs/actix-web/3/actix_web/web/struct.Query.html

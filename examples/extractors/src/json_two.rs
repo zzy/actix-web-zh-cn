@@ -1,6 +1,6 @@
 #![allow(dead_code)]
 
-// <json-two>
+// ANCHOR: json-two
 use actix_web::{error, web, App, FromRequest, HttpResponse, HttpServer, Responder};
 use serde::Deserialize;
 
@@ -35,4 +35,4 @@ async fn main() -> std::io::Result<()> {
     .run()
     .await
 }
-// </json-two>
+// ANCHOR_END: json-two

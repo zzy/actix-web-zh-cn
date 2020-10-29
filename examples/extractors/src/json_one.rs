@@ -1,4 +1,4 @@
-// <json-one>
+// ANCHOR: json-one
 use actix_web::{get, web, App, HttpServer, Result};
 use serde::Deserialize;
 
@@ -12,7 +12,7 @@ struct Info {
 async fn index(info: web::Json<Info>) -> Result<String> {
     Ok(format!("Welcome {}!", info.username))
 }
-// </json-one>
+// ANCHOR_END: json-one
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
