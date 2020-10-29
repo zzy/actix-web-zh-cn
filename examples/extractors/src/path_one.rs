@@ -1,4 +1,4 @@
-// <path-one>
+// ANCHOR: path-one
 use actix_web::{get, web, Result};
 
 /// extract path info from "/users/{user_id}/{friend}" url
@@ -18,4 +18,4 @@ async fn main() -> std::io::Result<()> {
         .run()
         .await
 }
-// </path-one>
+// ANCHOR_END: path-one

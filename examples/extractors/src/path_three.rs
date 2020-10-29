@@ -1,6 +1,6 @@
 use actix_web::{get, HttpRequest, Result};
 
-// <path-three>
+// ANCHOR: path-three
 #[get("/users/{userid}/{friend}")] // <- define path parameters
 async fn index(req: HttpRequest) -> Result<String> {
     let name: String = req.match_info().get("friend").unwrap().parse().unwrap();
@@ -18,4 +18,4 @@ async fn main() -> std::io::Result<()> {
         .run()
         .await
 }
-// </path-three>
+// ANCHOR_END: path-three

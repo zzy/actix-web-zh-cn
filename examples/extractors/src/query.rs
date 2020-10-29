@@ -1,4 +1,4 @@
-// <query>
+// ANCHOR: query
 use actix_web::{get, web, App, HttpServer};
 use serde::Deserialize;
 
@@ -12,7 +12,7 @@ struct Info {
 async fn index(info: web::Query<Info>) -> String {
     format!("Welcome {}!", info.username)
 }
-// </query>
+// ANCHOR_END: query
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {

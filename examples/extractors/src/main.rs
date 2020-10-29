@@ -17,12 +17,12 @@ struct MyInfo {
     id: u32,
 }
 
-// <option-one>
+// ANCHOR: option-one
 async fn index(path: web::Path<(String, String)>, json: web::Json<MyInfo>) -> impl Responder {
     let path = path.into_inner();
     format!("{} {} {} {}", path.0, path.1, json.id, json.username)
 }
-// </option-one>
+// ANCHOR_END: option-one
 
 // <option-two>
 async fn extract(req: HttpRequest) -> impl Responder {

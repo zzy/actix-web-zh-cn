@@ -1,47 +1,46 @@
----
-title: Extractors
-menu: docs_basics
-weight: 170
----
+# 类型安全的信息提取
 
-# Type-safe information extraction
+> [extractors.md](https://github.com/actix/actix-website/blob/master/content/docs/extractors.md)
+> <br />
+> commit - 4d8d53cea59bca095ca5c02ef81f0b1791736855 - 2020.09.12
 
-Actix-web provides a facility for type-safe request information access called *extractors*
-(ie, `impl FromRequest`). By default, actix-web provides several extractor implementations.
+actix-web 提供了一个称之为*提取器*（extractor，`impl FromRequest`）的请求信息访问工具，它是类型安全的。默认情况下，actix-web 提供了多种提取器实现。
 
-An extractor can be accessed as an argument to a handler function. Actix-web supports
-up to 10 extractors per handler function. Argument position does not matter.
+提取器可以作为处理程序函数的参数。actix-web 支持每个处理程序函数最多有 10 个提取器参数，参数位置无关紧要。
 
-{{< include-example example="extractors" file="main.rs" section="option-one" >}}
+```rust,edition2018,no_run,noplaypen
+{{#include ../examples/extractors/src/main.rs:option-one}}
+```
 
-# Path
+# 路径（Path）
 
-[*Path*][pathstruct] provides information that can be extracted from the Request's
-path. You can deserialize any variable segment from the path.
+[*路径（Path）*][pathstruct]是结构体类型，提供可从请求路径提取的信息，路径中的任何变量都可以反序列化。
 
-For instance, for resource that registered for the `/users/{user_id}/{friend}` path,
-two segments could be deserialized, `user_id` and `friend`. These segments could be
-extracted into a `tuple`, i.e. `Path<(u32, String)>` or any structure that implements
-the `Deserialize` trait from the *serde* crate.
+举例来说，对于注册为 `/users/{user_id}/{friend}` 路径的资源，有两个变量可以被反序列化：`user_id` 和 `friend`。这些变量可以被提取到一个`元组（tuple）`中（如 `Path<(u32, String)>`），或者被提取到实现了 *serde* crate 中的 `Deserialize` trait 的任何结构中。
 
-{{< include-example example="extractors" file="path_one.rs" section="path-one" >}}
+```rust,edition2018,no_run,noplaypen
+{{#include ../examples/extractors/src/path_one.rs:path-one}}
+```
 
-It is also possible to extract path information to a specific type that implements the
-`Deserialize` trait from *serde*. Here is an equivalent example that uses *serde*
-instead of a *tuple* type.
+路径信息也可以提取到实现了 *serde* crate 中的 `Deserialize` trait 的特定类型中。下面是一个使用*结构体（struct）*类型而非*元组（tuple）*类型的例子，结构体类型实现了 *serde* crate 中的 `Deserialize` trait，它和使用*元组（tuple）*类型是等效的。
 
-{{< include-example example="extractors" file="path_two.rs" section="path-two" >}}
+```rust,edition2018,no_run,noplaypen
+{{#include ../examples/extractors/src/path_two.rs:path-two}}
+```
 
-It is also possible to `get` or `query` the request for path parameters by name:
+还可以使用 `get` 方法或者 `query` 方法，根据参数名称提取请求中的路径参数：
 
-{{< include-example example="extractors" file="path_three.rs" section="path-three" >}}
+```rust,edition2018,no_run,noplaypen
+{{#include ../examples/extractors/src/path_three.rs:path-three}}
+```
 
-# Query
+# 查询（Query）
 
-The [*Query*][querystruct] type provides extraction functionality for the request's
-query parameters. Underneath it uses *serde_urlencoded* crate.
+[*查询（Query）*][querystruct]是结构体类型，为请求中的查询参数提供提取功能。下文的例子使用了 *serde_urlencoded* crate：
 
-{{< include-example example="extractors" file="query.rs" section="query" >}}
+```rust,edition2018,no_run,noplaypen
+{{#include ../examples/extractors/src/query.rs:query}}
+```
 
 # Json
 
