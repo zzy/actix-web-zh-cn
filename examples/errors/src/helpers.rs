@@ -1,4 +1,4 @@
-// <helpers>
+// ANCHOR: helpers
 use actix_web::{error, get, App, HttpServer, Result};
 
 #[derive(Debug)]
@@ -12,7 +12,7 @@ async fn index() -> Result<&'static str> {
 
     Ok(result.map_err(|e| error::ErrorBadRequest(e.name))?)
 }
-// </helpers>
+// ANCHOR_END: helpers
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {

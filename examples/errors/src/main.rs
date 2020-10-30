@@ -4,7 +4,7 @@ pub mod override_error;
 pub mod recommend_one;
 pub mod recommend_two;
 
-// <response-error>
+// ANCHOR: response-error
 use actix_web::{error, Result};
 use derive_more::{Display, Error};
 
@@ -20,7 +20,7 @@ impl error::ResponseError for MyError {}
 async fn index() -> Result<&'static str, MyError> {
     Err(MyError { name: "test" })
 }
-// </response-error>
+// ANCHOR_END: response-error
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {

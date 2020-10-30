@@ -1,4 +1,4 @@
-// <override>
+// ANCHOR: override
 use actix_web::{
     dev::HttpResponseBuilder, error, get, http::header, http::StatusCode, App, HttpResponse,
 };
@@ -36,7 +36,7 @@ impl error::ResponseError for MyError {
 async fn index() -> Result<&'static str, MyError> {
     Err(MyError::BadClientData)
 }
-// </override>
+// ANCHOR_END: override
 
 #[get("/e2")]
 async fn error2() -> Result<&'static str, MyError> {

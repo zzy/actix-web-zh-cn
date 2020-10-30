@@ -1,4 +1,4 @@
-// <recommend-two>
+// ANCHOR: recommend-two
 use actix_web::{
     dev::HttpResponseBuilder, error, get, http::header, http::StatusCode, App, HttpResponse,
     HttpServer,
@@ -29,7 +29,7 @@ async fn index() -> Result<&'static str, UserError> {
     do_thing_that_fails().map_err(|_e| UserError::InternalError)?;
     Ok("success!")
 }
-// </recommend-two>
+// ANCHOR_END: recommend-two
 
 fn do_thing_that_fails() -> Result<(), std::io::Error> {
     Err(std::io::Error::new(std::io::ErrorKind::Other, "some error"))

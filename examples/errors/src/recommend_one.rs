@@ -1,4 +1,4 @@
-// <recommend-one>
+// ANCHOR: recommend-one
 use actix_web::{
     dev::HttpResponseBuilder, error, get, http::header, http::StatusCode, App, HttpResponse,
     HttpServer,
@@ -23,7 +23,7 @@ impl error::ResponseError for UserError {
         }
     }
 }
-// </recommend-one>
+// ANCHOR_END: recommend-one
 
 #[get("/")]
 async fn index() -> Result<&'static str, UserError> {
