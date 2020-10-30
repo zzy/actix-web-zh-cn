@@ -1,6 +1,6 @@
 #![allow(dead_code)]
 
-// <norm>
+// ANCHOR: norm
 use actix_web::{middleware, HttpResponse};
 
 async fn index() -> HttpResponse {
@@ -20,4 +20,4 @@ async fn main() -> std::io::Result<()> {
     .run()
     .await
 }
-// </norm>
+// ANCHOR_END: norm

@@ -30,14 +30,18 @@ method adds a single route to application routing table. This method accepts a *
 *HTTP method* and a handler function. `route()` method could be called multiple times
 for the same path, in that case, multiple routes register for the same resource path.
 
-{{< include-example example="url-dispatch" section="main" >}}
+```rust,edition2018,no_run,noplaypen
+{{#include ../examples/url-dispatch/src/main.rs:main}}
+```
 
 While *App::route()* provides simple way of registering routes, to access complete resource
 configuration, a different method has to be used.  The [*App::service()*][appservice] method
 adds a single [resource][webresource] to application routing table. This method accepts a
 *path pattern*, guards, and one or more routes.
 
-{{< include-example example="url-dispatch" file="resource.rs" section="resource" >}}
+```rust,edition2018,no_run,noplaypen
+{{#include ../examples/url-dispatch/src/resource.rs:resource}}
+```
 
 If a resource does not contain any route or does not have any matching routes, it
 returns *NOT FOUND* HTTP response.
@@ -55,7 +59,9 @@ the order the routes were registered via `Resource::route()`.
 
 > A *Route* can contain any number of *guards* but only one handler.
 
-{{< include-example example="url-dispatch" file="cfg.rs" section="cfg" >}}
+```rust,edition2018,no_run,noplaypen
+{{#include ../examples/url-dispatch/src/cfg.rs:cfg}}
+```
 
 In this example, `HttpResponse::Ok()` is returned for *GET* requests if the request
 contains `Content-Type` header, the value of this header is *text/plain*, and path
@@ -242,7 +248,9 @@ Suppose that you want to organize paths to endpoints used to view "Users". Such 
 
 A scoped layout of these paths would appear as follows
 
-{{< include-example example="url-dispatch" file="scope.rs" section="scope" >}}
+```rust,edition2018,no_run,noplaypen
+{{#include ../examples/url-dispatch/src/scope.rs:scope}}
+```
 
 A *scoped* path can contain variable path segments as resources. Consistent with 
 un-scoped paths.
@@ -255,7 +263,9 @@ You can get variable path segments from `HttpRequest::match_info()`.
 All values representing matched path segments are available in [`HttpRequest::match_info`][matchinfo].
 Specific values can be retrieved with [`Path::get()`][pathget].
 
-{{< include-example example="url-dispatch" file="minfo.rs" section="minfo" >}}
+```rust,edition2018,no_run,noplaypen
+{{#include ../examples/url-dispatch/src/minfo.rs:minfo}}
+```
 
 For this example for path '/a/1/2/', values v1 and v2 will resolve to "1" and "2".
 
@@ -275,7 +285,9 @@ an `Err` is returned indicating the condition met:
 As a result of these conditions, a `PathBuf` parsed from request path parameter is
 safe to interpolate within, or use as a suffix of, a path without additional checks.
 
-{{< include-example example="url-dispatch" file="pbuf.rs" section="pbuf" >}}
+```rust,edition2018,no_run,noplaypen
+{{#include ../examples/url-dispatch/src/pbuf.rs:pbuf}}
+```
 
 ## Path information extractor
 
@@ -285,12 +297,16 @@ approach is to use `tuple` type. Each element in tuple must correspond to one el
 path pattern. i.e. you can match path pattern `/{id}/{username}/` against
 `Path<(u32, String)>` type, but `Path<(String, String, String)>` type will always fail.
 
-{{< include-example example="url-dispatch" file="path.rs" section="path" >}}
+```rust,edition2018,no_run,noplaypen
+{{#include ../examples/url-dispatch/src/path.rs:path}}
+```
 
 It also possible to extract path pattern information to a struct. In this case,
 this struct must implement *serde's *`Deserialize` trait.
 
-{{< include-example example="url-dispatch" file="path2.rs" section="path" >}}
+```rust,edition2018,no_run,noplaypen
+{{#include ../examples/url-dispatch/src/path2.rs:path}}
+```
 
 [*Query*][query] provides similar functionality for request query parameters.
 
@@ -300,7 +316,9 @@ Use the [*HttpRequest.url_for()*][urlfor] method to generate URLs based on resou
 patterns. For example, if you've configured a resource with the name "foo" and the
 pattern "{a}/{b}/{c}", you might do this:
 
-{{< include-example example="url-dispatch" file="urls.rs" section="url" >}}
+```rust,edition2018,no_run,noplaypen
+{{#include ../examples/url-dispatch/src/urls.rs:url}}
+```
 
 This would return something like the string *http://example.com/test/1/2/3* (at least if
 the current protocol and hostname implied http://example.com).  `url_for()` method
@@ -312,7 +330,9 @@ returns [*Url object*][urlobj] so you can modify this url (add query parameters,
 Resources that are valid URLs, can be registered as external resources. They are useful
 for URL generation purposes only and are never considered for matching at request time.
 
-{{< include-example example="url-dispatch" file="url_ext.rs" section="ext" >}}
+```rust,edition2018,no_run,noplaypen
+{{#include ../examples/url-dispatch/src/url_ext.rs:ext}}
+```
 
 # Path normalization and redirecting to slash-appended routes
 
@@ -326,7 +346,9 @@ normalization conditions, if all are enabled, is 1) merge, 2) both merge and app
 3) append. If the path resolves with at least one of those conditions, it will redirect
 to the new path.
 
-{{< include-example example="url-dispatch" file="norm.rs" section="norm" >}}
+```rust,edition2018,no_run,noplaypen
+{{#include ../examples/url-dispatch/src/norm.rs:norm}}
+```
 
 In this example `//resource///` will be redirected to `/resource/`.
 
@@ -337,7 +359,9 @@ slash-appending *Not Found* will turn a *POST* request into a GET, losing any
 
 It is possible to register path normalization only for *GET* requests only:
 
-{{< include-example example="url-dispatch" file="norm2.rs" section="norm" >}}
+```rust,edition2018,no_run,noplaypen
+{{#include ../examples/url-dispatch/src/norm2.rs:norm}}
+```
 
 ## 使用作用域前缀
 
@@ -348,7 +372,9 @@ than the included callable's author intended while still maintaining the same re
 
 For example:
 
-{{< include-example example="url-dispatch" file="scope.rs" section="scope" >}}
+```rust,edition2018,no_run,noplaypen
+{{#include ../examples/url-dispatch/src/scope.rs:scope}}
+```
 
 In the above example, the *show_users* route will have an effective route pattern of
 */users/show* instead of */show* because the application's scope will be prepended
@@ -365,7 +391,9 @@ and returns *true* or *false*. Formally, a guard is any object that implements t
 
 Here is a simple guard that check that a request contains a specific *header*:
 
-{{< include-example example="url-dispatch" file="guard.rs" section="guard" >}}
+```rust,edition2018,no_run,noplaypen
+{{#include ../examples/url-dispatch/src/guard.rs:guard}}
+```
 
 In this example, *index* handler will be called only if request contains *CONTENT-TYPE* header.
 
@@ -378,7 +406,9 @@ You can invert the meaning of any predicate value by wrapping it in a `Not` pred
 For example, if you want to return "METHOD NOT ALLOWED" response for all methods
 except "GET":
 
-{{< include-example example="url-dispatch" file="guard2.rs" section="guard2" >}}
+```rust,edition2018,no_run,noplaypen
+{{#include ../examples/url-dispatch/src/guard2.rs:guard2}}
+```
 
 The `Any` guard accepts a list of guards and matches if any of the supplied
 guards match. i.e:
@@ -402,7 +432,9 @@ It is possible to override the *NOT FOUND* response with `App::default_service()
 This method accepts a *configuration function* same as normal resource configuration
 with `App::service()` method.
 
-{{< include-example example="url-dispatch" file="dhandler.rs" section="default" >}}
+```rust,edition2018,no_run,noplaypen
+{{#include ../examples/url-dispatch/src/dhandler.rs:default}}
+```
 
 [handlersection]: ../handlers/
 [approute]: https://docs.rs/actix-web/3/actix_web/struct.App.html#method.route

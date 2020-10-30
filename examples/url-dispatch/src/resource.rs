@@ -1,4 +1,4 @@
-// <resource>
+// ANCHOR: resource
 use actix_web::{guard, web, App, HttpResponse};
 
 fn index() -> HttpResponse {
@@ -16,4 +16,4 @@ pub fn main() {
                 .route(web::put().to(|| HttpResponse::Ok())),
         );
 }
-// </resource>
+// ANCHOR_END: resource

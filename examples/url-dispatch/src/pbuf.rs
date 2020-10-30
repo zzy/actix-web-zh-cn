@@ -1,4 +1,4 @@
-// <pbuf>
+// ANCHOR: pbuf
 use actix_web::{get, App, HttpRequest, HttpServer, Result};
 use std::path::PathBuf;
 
@@ -15,4 +15,4 @@ async fn main() -> std::io::Result<()> {
         .run()
         .await
 }
-// </pbuf>
+// ANCHOR_END: pbuf

@@ -1,6 +1,6 @@
 use actix_web::{get, web, App, HttpResponse, HttpServer};
 
-// <scope>
+// ANCHOR: scope
 #[get("/show")]
 async fn show_users() -> HttpResponse {
     HttpResponse::Ok().body("Show users")
@@ -24,4 +24,4 @@ async fn main() -> std::io::Result<()> {
     .run()
     .await
 }
-// </scope>
+// ANCHOR_END: scope

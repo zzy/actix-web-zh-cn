@@ -1,4 +1,4 @@
-// <guard2>
+// ANCHOR: guard2
 use actix_web::{guard, web, App, HttpResponse, HttpServer};
 
 #[actix_web::main]
@@ -15,4 +15,4 @@ async fn main() -> std::io::Result<()> {
     .run()
     .await
 }
-// </guard2>
+// ANCHOR_END: guard2

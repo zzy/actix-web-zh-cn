@@ -1,4 +1,4 @@
-// <guard>
+// ANCHOR: guard
 use actix_web::{dev::RequestHead, guard::Guard, http, HttpResponse};
 
 struct ContentTypeHeader;
@@ -25,4 +25,4 @@ async fn main() -> std::io::Result<()> {
     .run()
     .await
 }
-// </guard>
+// ANCHOR_END: guard

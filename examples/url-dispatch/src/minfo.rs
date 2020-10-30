@@ -1,4 +1,4 @@
-// <minfo>
+// ANCHOR: minfo
 use actix_web::{get, App, HttpRequest, HttpServer, Result};
 
 #[get("/a/{v1}/{v2}/")]
@@ -16,4 +16,4 @@ async fn main() -> std::io::Result<()> {
         .run()
         .await
 }
-// </minfo>
+// ANCHOR_END: minfo

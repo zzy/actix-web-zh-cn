@@ -5,7 +5,7 @@ async fn index(_req: HttpRequest) -> impl Responder {
     "Welcome!"
 }
 
-// <default>
+// ANCHOR: default
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
@@ -21,4 +21,4 @@ async fn main() -> std::io::Result<()> {
     .run()
     .await
 }
-// </default>
+// ANCHOR_END: default

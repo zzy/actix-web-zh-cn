@@ -1,4 +1,4 @@
-// <path>
+// ANCHOR: path
 use actix_web::{get, web, App, HttpServer, Result};
 use serde::Deserialize;
 
@@ -20,4 +20,4 @@ async fn main() -> std::io::Result<()> {
         .run()
         .await
 }
-// </path>
+// ANCHOR_END: path

@@ -6,7 +6,7 @@ async fn main() -> std::io::Result<()> {
     use actix_web::HttpServer;
 
     HttpServer::new(|| {
-// <cfg>
+// ANCHOR: cfg
 App::new().service(
     web::resource("/path").route(
         web::route()
@@ -15,7 +15,7 @@ App::new().service(
             .to(|| HttpResponse::Ok()),
     ),
 )
-// </cfg>
+// ANCHOR_END: cfg
     })
     .bind("127.0.0.1:8080")?
     .run()

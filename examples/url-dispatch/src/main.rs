@@ -13,7 +13,7 @@ pub mod scope;
 pub mod url_ext;
 pub mod urls;
 
-// <main>
+// ANCHOR: main
 use actix_web::{web, App, HttpResponse, HttpServer};
 
 async fn index() -> HttpResponse {
@@ -31,4 +31,4 @@ async fn main() -> std::io::Result<()> {
     .run()
     .await
 }
-// </main>
+// ANCHOR_END: main

@@ -1,4 +1,4 @@
-// <ext>
+// ANCHOR: ext
 use actix_web::{get, App, HttpRequest, HttpServer, Responder};
 
 #[get("/")]
@@ -20,4 +20,4 @@ async fn main() -> std::io::Result<()> {
     .run()
     .await
 }
-// </ext>
+// ANCHOR_END: ext

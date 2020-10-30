@@ -1,4 +1,4 @@
-// <url>
+// ANCHOR: url
 use actix_web::{get, guard, http::header, HttpRequest, HttpResponse, Result};
 
 #[get("/test/")]
@@ -28,4 +28,4 @@ async fn main() -> std::io::Result<()> {
     .run()
     .await
 }
-// </url>
+// ANCHOR_END: url
