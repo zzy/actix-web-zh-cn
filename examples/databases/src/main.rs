@@ -1,4 +1,4 @@
-// <handler>
+// ANCHOR: handler
 fn insert_new_user(db: &SqliteConnection, user: CreateUser) -> Result<User, Error> {
     use self::schema::users::dsl::*;
 
@@ -22,9 +22,9 @@ fn insert_new_user(db: &SqliteConnection, user: CreateUser) -> Result<User, Erro
 
     Ok(items.pop().unwrap())
 }
-// </handler>
+// ANCHOR_END: handler
 
-// <main>
+// ANCHOR: main
 type DbPool = r2d2::Pool<ConnectionManager<SqliteConnection>>;
 
 #[actix_web::main]
@@ -43,9 +43,9 @@ async fn main() -> io::Result<()> {
     .run()
     .await
 }
-// </main>
+// ANCHOR_END: main
 
-// <index>
+// ANCHOR: index
 async fn index(pool: web::Data<DbPool>, name: web::Path<(String)>) -> impl Responder {
     let name = name.into_inner();
 
@@ -60,4 +60,4 @@ async fn index(pool: web::Data<DbPool>, name: web::Path<(String)>) -> impl Respo
     
     Ok(HttpResponse::Ok().json(user))
 }
-// </index>
+// ANCHOR_END: index
