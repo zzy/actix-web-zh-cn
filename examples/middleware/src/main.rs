@@ -4,7 +4,7 @@ pub mod logger;
 pub mod user_sessions;
 pub mod wrap_fn;
 
-// <simple>
+// ANCHOR: simple
 use std::pin::Pin;
 use std::task::{Context, Poll};
 
@@ -72,7 +72,7 @@ where
         })
     }
 }
-// </simple>
+// ANCHOR_END: simple
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {

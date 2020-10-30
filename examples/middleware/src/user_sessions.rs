@@ -1,6 +1,6 @@
 #![allow(dead_code)]
 
-// <user-session>
+// ANCHOR: user-session
 use actix_session::{CookieSession, Session};
 use actix_web::{web, App, Error, HttpResponse, HttpServer};
 
@@ -32,4 +32,4 @@ async fn main() -> std::io::Result<()> {
     .run()
     .await
 }
-// </user-session>
+// ANCHOR_END: user-session

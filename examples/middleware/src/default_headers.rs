@@ -1,4 +1,4 @@
-// <default-headers>
+// ANCHOR: default-headers
 use actix_web::{http, middleware, HttpResponse};
 
 #[actix_web::main]
@@ -21,4 +21,4 @@ async fn main() -> std::io::Result<()> {
     .run()
     .await
 }
-// </default-headers>
+// ANCHOR_END: default-headers

@@ -1,4 +1,4 @@
-// <logger>
+// ANCHOR: logger
 use actix_web::middleware::Logger;
 use env_logger::Env;
 
@@ -17,4 +17,4 @@ async fn main() -> std::io::Result<()> {
     .run()
     .await
 }
-// </logger>
+// ANCHOR_END: logger

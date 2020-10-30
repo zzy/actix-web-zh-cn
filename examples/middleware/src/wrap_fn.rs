@@ -1,6 +1,6 @@
 #![allow(dead_code, unused_variables)]
 
-// <wrap-fn>
+// ANCHOR: wrap-fn
 use actix_service::Service;
 use actix_web::{web, App};
 use futures::future::FutureExt;
@@ -22,4 +22,4 @@ async fn main() {
             }),
         );
 }
-// </wrap-fn>
+// ANCHOR_END: wrap-fn
