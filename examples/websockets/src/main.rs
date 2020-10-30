@@ -1,4 +1,4 @@
-// <websockets>
+// ANCHOR: websockets
 use actix::{Actor, StreamHandler};
 use actix_web::{web, App, Error, HttpRequest, HttpResponse, HttpServer};
 use actix_web_actors::ws;
@@ -39,7 +39,7 @@ async fn main() -> std::io::Result<()> {
         .run()
         .await
 }
-// </websockets>
+// ANCHOR_END: websockets
 
 // testing requires specific headers:
 // Upgrade: websocket

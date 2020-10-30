@@ -11,7 +11,9 @@ websocket communications with an http actor.
 
 The following is an example of a simple websocket echo server:
 
-{{< include-example example="websockets" file="main.rs" section="websockets" >}}
+```rust,edition2018,no_run,noplaypen
+{{#include ../examples/websockets/src/main.rs:websockets}}
+```
 
 > A simple websocket echo server example is available in the [examples directory][examples].
 
