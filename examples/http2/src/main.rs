@@ -1,4 +1,4 @@
-// <main>
+// ANCHOR: main
 use actix_web::{web, App, HttpRequest, HttpServer, Responder};
 use openssl::ssl::{SslAcceptor, SslFiletype, SslMethod};
 
@@ -22,4 +22,4 @@ async fn main() -> std::io::Result<()> {
         .run()
         .await
 }
-// </main>
+// ANCHOR_END: main

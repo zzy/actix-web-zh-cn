@@ -21,7 +21,10 @@ weight: 250
 actix-web = { version = "{{< actix-version "actix-web" >}}", features = ["openssl"] }
 openssl = { version = "0.10", features = ["v110"] }
 ```
-{{< include-example example="http2" file="main.rs" section="main" >}}
+
+```rust,edition2018,no_run,noplaypen
+{{#include ../examples/http2/src/main.rs:main}}
+```
 
 Upgrades to *HTTP/2.0* schema described in [rfc section 3.2][rfcsection32] is not
 supported.  Starting *HTTP/2* with prior knowledge is supported for both clear text
