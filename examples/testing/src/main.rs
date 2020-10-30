@@ -16,7 +16,7 @@ fn main() {
     App::new().route("/", web::get().to(index));
 }
 
-// <unit-tests>
+// ANCHOR: unit-tests
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -36,4 +36,4 @@ mod tests {
         assert_eq!(resp.status(), http::StatusCode::BAD_REQUEST);
     }
 }
-// </unit-tests>
+// ANCHOR_END: unit-tests

@@ -15,7 +15,9 @@ For unit testing, actix-web provides a request builder type.
 [*TestRequest*][testrequest] implements a builder-like pattern. You can generate a
 `HttpRequest` instance with `to_http_request()` and call your handler with it.
 
-{{< include-example example="testing" file="main.rs" section="unit-tests" >}}
+```rust,edition2018,no_run,noplaypen
+{{#include ../examples/testing/src/main.rs:unit-tests}}
+```
 
 # Integration tests
 
@@ -30,13 +32,17 @@ regular `App` builder.
 
 > Check the [API documentation][actixdocs] for more information.
 
-{{< include-example example="testing" file="integration_one.rs" section="integration-one" >}}
+```rust,edition2018,no_run,noplaypen
+{{#include ../examples/testing/src/integration_one.rs:integration-one}}
+```
 
 If you need more complex application configuration, testing should be very similar to creating
 the normal application. For example, you may need to initialize application state. Create an
 `App` with a `data` method and attach state just like you would from a normal application.
 
-{{< include-example example="testing" file="integration_two.rs" section="integration-two" >}}
+```rust,edition2018,no_run,noplaypen
+{{#include ../examples/testing/src/integration_two.rs:integration-two}}
+```
 
 # Stream response tests
 
@@ -44,7 +50,9 @@ If you need to test stream generation, it would be enough to call `take_body()` 
 resulting [*ResponseBody*][responsebody] into a future and execute it, for example when testing
 [*Server Sent Events*][serversentevents].
 
-{{< include-example example="testing" file="stream_response.rs" section="stream-response" >}}
+```rust,edition2018,no_run,noplaypen
+{{#include ../examples/testing/src/stream_response.rs:stream-response}}
+```
 
 [serversentevents]: https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events
 [responsebody]: https://docs.rs/actix-web/3/actix_web/body/enum.ResponseBody.html

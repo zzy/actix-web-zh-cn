@@ -5,7 +5,7 @@ async fn index(_req: HttpRequest) -> impl Responder {
     "Hello world!"
 }
 
-// <integration-one>
+// ANCHOR: integration-one
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -27,4 +27,4 @@ mod tests {
         assert!(resp.status().is_client_error());
     }
 }
-// </integration-one>
+// ANCHOR_END: integration-one

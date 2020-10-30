@@ -11,7 +11,7 @@ async fn index(data: web::Data<AppState>) -> impl Responder {
     HttpResponse::Ok().json(data.get_ref())
 }
 
-// <integration-two>
+// ANCHOR: integration-two
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -30,4 +30,4 @@ mod tests {
         assert_eq!(resp.count, 4);
     }
 }
-// </integration-two>
+// ANCHOR_END: integration-two

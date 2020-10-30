@@ -1,4 +1,4 @@
-// <stream-response>
+// ANCHOR: stream-response
 use std::task::Poll;
 use bytes::Bytes;
 use futures::stream::poll_fn;
@@ -62,4 +62,4 @@ mod tests {
         assert_eq!(bytes.unwrap(), Bytes::from_static(b"data: 3\n\ndata: 2\n\ndata: 1\n\n"));
     }
 }
-// </stream-response>
+// ANCHOR_END: stream-response
