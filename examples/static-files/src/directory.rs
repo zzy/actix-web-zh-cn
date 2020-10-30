@@ -1,4 +1,4 @@
-// <directory>
+// ANCHOR: directory
 use actix_files as fs;
 use actix_web::{App, HttpServer};
 
@@ -11,4 +11,4 @@ async fn main() -> std::io::Result<()> {
     .run()
     .await
 }
-// </directory>
+// ANCHOR_END: directory

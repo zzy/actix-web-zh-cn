@@ -1,4 +1,4 @@
-// <config-two>
+// ANCHOR: config-two
 use actix_files as fs;
 use actix_web::{App, HttpServer};
 
@@ -15,4 +15,4 @@ async fn main() -> std::io::Result<()> {
     .run()
     .await
 }
-// </config-two>
+// ANCHOR_END: config-two

@@ -1,4 +1,4 @@
-// <config-one>
+// ANCHOR: config-one
 use actix_files as fs;
 use actix_web::http::header::{ContentDisposition, DispositionType};
 use actix_web::{get, App, Error, HttpRequest, HttpServer};
@@ -22,4 +22,4 @@ async fn main() -> std::io::Result<()> {
         .run()
         .await
 }
-// </config-one>
+// ANCHOR_END: config-one

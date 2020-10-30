@@ -2,7 +2,7 @@ pub mod configuration;
 pub mod configuration_two;
 pub mod directory;
 
-// <individual-file>
+// ANCHOR: individual-file
 use actix_files::NamedFile;
 use actix_web::{HttpRequest, Result};
 use std::path::PathBuf;
@@ -21,4 +21,4 @@ async fn main() -> std::io::Result<()> {
         .run()
         .await
 }
-// </individual-file>
+// ANCHOR_END: individual-file
