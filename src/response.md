@@ -16,7 +16,9 @@ The methods `.body`, `.finish`, and `.json` finalize response creation and retur
 constructed *HttpResponse* instance. If this methods is called on the same builder
 instance multiple times, the builder will panic.
 
-{{< include-example example="responses" file="main.rs" section="builder" >}}
+```rust,edition2018,no_run,noplaypen
+{{#include ../examples/responses/src/main.rs:builder}}
+```
 
 # Content encoding
 
@@ -28,7 +30,9 @@ The following codecs are supported:
 * Deflate
 * Identity
 
-{{< include-example example="responses" file="compress.rs" section="compress" >}}
+```rust,edition2018,no_run,noplaypen
+{{#include ../examples/responses/src/compress.rs:compress}}
+```
 
 Response payload is compressed based on the *encoding* parameter from the
 `middleware::BodyEncoding` trait.  By default, `ContentEncoding::Auto` is used. If
@@ -40,28 +44,38 @@ Response payload is compressed based on the *encoding* parameter from the
 
 For example, to enable `brotli` for a single handler use `ContentEncoding::Br`:
 
-{{< include-example example="responses" file="brotli.rs" section="brotli" >}}
+```rust,edition2018,no_run,noplaypen
+{{#include ../examples/responses/src/brotli.rs:brotli}}
+```
 
 or for the entire application:
 
-{{< include-example example="responses" file="brotli_two.rs" section="brotli-two" >}}
+```rust,edition2018,no_run,noplaypen
+{{#include ../examples/responses/src/brotli_two.rs:brotli-two}}
+```
 
 In this case we explicitly disable content compression by setting content encoding to
 an `Identity` value:
 
-{{< include-example example="responses" file="identity.rs" section="identity" >}}
+```rust,edition2018,no_run,noplaypen
+{{#include ../examples/responses/src/identity.rs:identity}}
+```
 
 When dealing with an already compressed body (for example when serving assets),
 set the content encoding to `Identity` to avoid compressing the already compressed
 data and set the `content-encoding` header manually:
 
-{{< include-example example="responses" file="identity_two.rs" section="identity-two" >}}
+```rust,edition2018,no_run,noplaypen
+{{#include ../examples/responses/src/identity_two.rs:identity-two}}
+```
 
 Also it is possible to set default content encoding on application level, by
 default `ContentEncoding::Auto` is used, which implies automatic content compression
 negotiation.
 
-{{< include-example example="responses" file="auto.rs" section="auto" >}}
+```rust,edition2018,no_run,noplaypen
+{{#include ../examples/responses/src/auto.rs:auto}}
+```
 
 # JSON Response
 
@@ -69,7 +83,9 @@ The `Json` type allows to respond with well-formed JSON data: simply return a va
 type `Json<T>` where `T` is the type of a structure to serialize into *JSON*.
 The type `T` must implement the `Serialize` trait from *serde*.
 
-{{< include-example example="responses" file="json_resp.rs" section="json-resp" >}}
+```rust,edition2018,no_run,noplaypen
+{{#include ../examples/responses/src/json_resp.rs:json-resp}}
+```
 
 [responsebuilder]: https://docs.rs/actix-web/3/actix_web/dev/struct.HttpResponseBuilder.html
 [compressmidddleware]: https://docs.rs/actix-web/3/actix_web/middleware/struct.Compress.html

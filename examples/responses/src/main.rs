@@ -6,7 +6,7 @@ pub mod identity;
 pub mod identity_two;
 pub mod json_resp;
 
-// <builder>
+// ANCHOR: builder
 use actix_web::HttpResponse;
 
 async fn index() -> HttpResponse {
@@ -15,7 +15,7 @@ async fn index() -> HttpResponse {
         .header("X-Hdr", "sample")
         .body("data")
 }
-// </builder>
+// ANCHOR_END: builder
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {

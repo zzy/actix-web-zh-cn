@@ -1,4 +1,4 @@
-// <identity-two>
+// ANCHOR: identity-two
 use actix_web::{
     dev::BodyEncoding, get, http::ContentEncoding, middleware, App, HttpResponse, HttpServer,
 };
@@ -15,7 +15,7 @@ async fn index() -> HttpResponse {
         .header("content-encoding", "gzip")
         .body(HELLO_WORLD)
 }
-// </identity-two>
+// ANCHOR_END: identity-two
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {

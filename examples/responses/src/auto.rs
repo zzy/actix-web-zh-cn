@@ -1,4 +1,4 @@
-// <auto>
+// ANCHOR: auto
 use actix_web::{get, http::ContentEncoding, middleware, App, HttpResponse, HttpServer};
 
 #[get("/")]
@@ -17,4 +17,4 @@ async fn main() -> std::io::Result<()> {
     .run()
     .await
 }
-// </auto>
+// ANCHOR_END: auto

@@ -1,4 +1,4 @@
-// <json-resp>
+// ANCHOR: json-resp
 use actix_web::{get, web, HttpResponse, Result};
 use serde::{Deserialize, Serialize};
 
@@ -23,4 +23,4 @@ async fn main() -> std::io::Result<()> {
         .run()
         .await
 }
-// </json-resp>
+// ANCHOR_END: json-resp

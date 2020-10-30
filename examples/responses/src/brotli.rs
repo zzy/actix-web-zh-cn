@@ -1,4 +1,4 @@
-// <brotli>
+// ANCHOR: brotli
 use actix_web::{
     dev::BodyEncoding, get, http::ContentEncoding, middleware, App, HttpResponse, HttpServer,
 };
@@ -21,4 +21,4 @@ async fn main() -> std::io::Result<()> {
     .run()
     .await
 }
-// </brotli>
+// ANCHOR_END: brotli

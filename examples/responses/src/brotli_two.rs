@@ -1,4 +1,4 @@
-// <brotli-two>
+// ANCHOR: brotli-two
 use actix_web::{http::ContentEncoding, dev::BodyEncoding, HttpResponse};
 
 async fn index_br() -> HttpResponse {
@@ -18,4 +18,4 @@ async fn main() -> std::io::Result<()> {
     .run()
     .await
 }
-// </brotli-two>
+// ANCHOR_END: brotli-two

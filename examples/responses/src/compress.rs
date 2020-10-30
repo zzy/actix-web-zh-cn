@@ -1,4 +1,4 @@
-// <compress>
+// ANCHOR: compress
 use actix_web::{get, middleware, App, HttpResponse, HttpServer};
 
 #[get("/")]
@@ -17,4 +17,4 @@ async fn main() -> std::io::Result<()> {
     .run()
     .await
 }
-// </compress>
+// ANCHOR_END: compress

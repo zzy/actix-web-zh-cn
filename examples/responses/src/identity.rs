@@ -1,4 +1,4 @@
-// <identity>
+// ANCHOR: identity
 use actix_web::{
     dev::BodyEncoding, get, http::ContentEncoding, middleware, App, HttpResponse, HttpServer,
 };
@@ -22,4 +22,4 @@ async fn main() -> std::io::Result<()> {
     .run()
     .await
 }
-// </identity>
+// ANCHOR_END: identity
