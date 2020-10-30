@@ -3,7 +3,7 @@ pub mod multipart;
 pub mod streaming;
 pub mod urlencoded;
 
-// <json-request>
+// ANCHOR: json-request
 use actix_web::{web, App, HttpServer, Result};
 use serde::Deserialize;
 
@@ -24,4 +24,4 @@ async fn main() -> std::io::Result<()> {
         .run()
         .await
 }
-// </json-request>
+// ANCHOR_END: json-request

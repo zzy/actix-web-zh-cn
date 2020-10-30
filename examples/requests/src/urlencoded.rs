@@ -1,4 +1,4 @@
-// <urlencoded>
+// ANCHOR: urlencoded
 use actix_web::{post, web, HttpResponse};
 use serde::Deserialize;
 
@@ -11,7 +11,7 @@ struct FormData {
 async fn index(form: web::Form<FormData>) -> HttpResponse {
     HttpResponse::Ok().body(format!("username: {}", form.username))
 }
-// </urlencoded>
+// ANCHOR_END: urlencoded
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {

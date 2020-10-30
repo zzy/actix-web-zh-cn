@@ -1,4 +1,4 @@
-// <json-manual>
+// ANCHOR: json-manual
 use actix_web::{error, post, web, App, Error, HttpResponse};
 use futures::StreamExt;
 use serde::{Deserialize, Serialize};
@@ -29,7 +29,7 @@ async fn index_manual(mut payload: web::Payload) -> Result<HttpResponse, Error> 
     let obj = serde_json::from_slice::<MyObj>(&body)?;
     Ok(HttpResponse::Ok().json(obj)) // <- send response
 }
-// </json-manual>
+// ANCHOR_END: json-manual
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {

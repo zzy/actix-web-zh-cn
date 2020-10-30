@@ -1,4 +1,4 @@
-// <streaming>
+// ANCHOR: streaming
 use actix_web::{get, web, Error, HttpResponse};
 use futures::StreamExt;
 
@@ -13,7 +13,7 @@ async fn index(mut body: web::Payload) -> Result<HttpResponse, Error> {
 
     Ok(HttpResponse::Ok().finish())
 }
-// </streaming>
+// ANCHOR_END: streaming
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {

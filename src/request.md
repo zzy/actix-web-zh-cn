@@ -29,14 +29,18 @@ that accepts `Json<T>` as a parameter, then, you use the `.to()` method for regi
 this handler. It is also possible to accept arbitrary valid json object by
 using `serde_json::Value` as a type `T`.
 
-{{< include-example example="requests" file="main.rs" section="json-request" >}}
+```rust,edition2018,no_run,noplaypen
+{{#include ../examples/requests/src/main.rs:json-request}}
+```
 
 You may also manually load the payload into memory and then deserialize it.
 
 In the following example, we will deserialize a *MyObj* struct. We need to load the request
 body first and then deserialize the json into an object.
 
-{{< include-example example="requests" file="manual.rs" section="json-manual" >}}
+```rust,edition2018,no_run,noplaypen
+{{#include ../examples/requests/src/manual.rs:json-manual}}
+```
 
 > A complete example for both options is available in [examples directory][examples].
 
@@ -66,7 +70,9 @@ The *UrlEncoded* future can resolve into an error in several cases:
 * content-length is greater than 256k
 * payload terminates with error.
 
-{{< include-example example="requests" file="urlencoded.rs" section="urlencoded" >}}
+```rust,edition2018,no_run,noplaypen
+{{#include ../examples/requests/src/urlencoded.rs:urlencoded}}
+```
 
 # Streaming request
 
@@ -75,7 +81,9 @@ body payload.
 
 In the following example, we read and print the request payload chunk by chunk:
 
-{{< include-example example="requests" file="streaming.rs" section="streaming" >}}
+```rust,edition2018,no_run,noplaypen
+{{#include ../examples/requests/src/streaming.rs:streaming}}
+```
 
 [examples]: https://github.com/actix/examples/tree/master/json/
 [multipartstruct]: https://docs.rs/actix-multipart/0.2/actix_multipart/struct.Multipart.html
