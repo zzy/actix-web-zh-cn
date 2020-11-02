@@ -2,7 +2,7 @@
 title = "actix-web 开发指南 - actix-web 中文文档"
 authors = ["zzy"]
 language = "zh"
-description = "rust web 框架, actix-web 开发指南, actix-web 中文文档, actix-web 实例示例"
+description = "rust web 框架, actix-web 开发指南, actix-web 项目实战, actix-web 中文文档"
 src = "src"
 multilingual = true
 
