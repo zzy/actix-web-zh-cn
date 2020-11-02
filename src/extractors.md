@@ -6,7 +6,7 @@
 
 actix-web 提供了一个称之为*提取器*（extractor，`impl FromRequest`）的请求信息访问工具，它是类型安全的。默认情况下，actix-web 提供了多种提取器实现。
 
-提取器可以作为处理程序函数的参数。actix-web 支持每个处理程序函数最多有 10 个提取器参数，参数位置无关紧要。
+提取器可以作为 handler 函数的参数。actix-web 支持每个 `handler` 函数最多有 10 个提取器参数，参数位置无关紧要。
 
 ```rust,edition2018,no_run,noplaypen
 {{#include ../examples/extractors/src/main.rs:option-one}}
@@ -52,7 +52,7 @@ actix-web 提供了一个称之为*提取器*（extractor，`impl FromRequest`�
 
 一些提取器提供了配置提取过程的方法，[*JsonConfig*][jsonconfig] 结构体用于配置 Json 提取器。要配置提取器，请将其配置对象传递给 `web::resource` 的 `.app_data()` 方法。配置后，*Json* 提取器将返回 *JsonConfig* 结构体。你也可以配置 json 有效负载的最大值，以及自定义错误处理函数。
 
-下面的示例中，将有效负载的大小限制为 4kb，并使用自定义的错误处理程序。
+下面的示例中，将有效负载的大小限制为 4kb，并使用自定义的错误 `handler`。
 
 ```rust,edition2018,no_run,noplaypen
 {{#include ../examples/extractors/src/json_two.rs:json-two}}
@@ -80,19 +80,19 @@ actix-web 还提供了其它几种提取器：
 
 # 应用状态提取器
 
-可以使用 `web::Data` 提取器，从请求处理程序访问应用程序状态；但是，状态仅可以作为只读引用访问。如果你需要对状态的可变（mutable）访问，则状态必须被实现。
+可以使用 `web::Data` 提取器，从请求 `handler` 访问应用程序状态；但是，状态仅可以作为只读引用访问。如果你需要对状态的可变（mutable）访问，则状态必须被实现。
 
 注意，actix
 
-> **注意**，actix 会创建应用程序状态和请求处理程序的多个副本，它为每个工作线程创建一个副本。
+> **注意**，actix 会创建应用程序状态和请求 `handler` 的多个副本，它为每个工作线程创建一个副本。
 
-下面是一个请求处理程序的示例，用于存储已处理的请求数：
+下面是一个请求 `handler` 的示例，用于存储已处理的请求数：
 
 ```rust,edition2018,no_run,noplaypen
 {{#include ../examples/request-handlers/src/main.rs:data}}
 ```
 
-尽管此处理程序可以运行，但依赖于线程数和每个线程处理的请求数因素，`self.0` 可能不正确。正确的实现应该使用 `Arc（原子引用计数器）` 和 `AtomicUsize`。
+尽管此 `handler` 可以运行，但依赖于线程数和每个线程处理的请求数因素，`self.0` 可能不正确。正确的实现应该使用 `Arc（原子引用计数器）` 和 `AtomicUsize`。
 
 ```rust,edition2018,no_run,noplaypen
 {{#include ../examples/request-handlers/src/handlers_arc.rs:arc}}

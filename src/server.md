@@ -37,7 +37,7 @@
 {{#include ../examples/server/src/workers.rs:workers}}
 ```
 
-一旦创建了线程（worker），每个线程（worker）都会收到一个独立的 App（应用程序）实例，每个 App 实例都可以处理请求。应用程序状态（state）在线程之间不能共享，但处理程序可以自由地操作其状态副本，而无需担心并发性问题。
+一旦创建了线程（worker），每个线程（worker）都会收到一个独立的 App（应用程序）实例，每个 App 实例都可以处理请求。应用程序状态（state）在线程之间不能共享，但 `handler` 可以自由地操作其状态副本，而无需担心并发性问题。
 
 > 应用程序状态（state）不需要具有 `Send` 或者 `Sync` 约束，但应用程序工厂必须具有 `Send` + `Sync` 约束。
 
@@ -45,7 +45,7 @@
 
 在某些情况下，使用更有效的锁定策略可以降低这些性能成本。例如，使用[读/写锁](https://doc.rust-lang.org/std/sync/struct.RwLock.html)而不是[互斥器（mutexes）](https://doc.rust-lang.org/std/sync/struct.Mutex.html)来实现非互斥锁，但最具性能的实现，往往是根本不发生锁定的实现。
 
-由于每个工作线程都是按顺序处理其请求的，因此当处理程序阻塞当前线程时，将导致当前工作线程停止处理新请求：
+由于每个工作线程都是按顺序处理其请求的，因此当 `handler` 阻塞当前线程时，将导致当前工作线程停止处理新请求：
 
 ```rust,edition2018,no_run,noplaypen
 fn my_handler() -> impl Responder {
@@ -54,7 +54,7 @@ fn my_handler() -> impl Responder {
 }
 ```
 
-因上述原因，任何长时间的、非 cpu 限制的操作（例如，I/O、数据库操作等）都应该使用 `future` 函数或异步函数。异步处理程序由工作线程并发执行，因此不会发生阻塞：
+因上述原因，任何长时间的、非 cpu 限制的操作（例如，I/O、数据库操作等）都应该使用 `future` 函数或异步函数。异步 `handler` 由工作线程并发执行，因此不会发生阻塞：
 
 ```rust,edition2018,no_run,noplaypen
 async fn my_handler() -> impl Responder {
@@ -63,7 +63,7 @@ async fn my_handler() -> impl Responder {
 }
 ```
 
-同样的限制也适用于提取器（extractor）。当处理程序函数接收到实现了 `FromRequest` 的参数，并且该实现阻塞当前线程时，工作线程也将在运行时发生阻塞。因此，在实现提取器（extractor）时必须特别注意，而且在需要时也应该异步地实现它们。
+同样的限制也适用于提取器（extractor）。当 `handler` 函数接收到实现了 `FromRequest` 的参数，并且该实现阻塞当前线程时，工作线程也将在运行时发生阻塞。因此，在实现提取器（extractor）时必须特别注意，而且在需要时也应该异步地实现它们。
 
 ## SSL
 

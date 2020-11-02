@@ -101,7 +101,7 @@ async fn register(form: web::Form<Register>) -> impl Responder {
 
 ### 具备请求路由
 
-actix 具备 URL 路由系统，可以匹配 URL 并调用各个处理程序。为了获得额外的灵活性，可以使用作用域。
+actix 具备 URL 路由系统，可以匹配 URL 并调用各个 `handler`。为了获得额外的灵活性，可以使用作用域。
 
 ```rust,edition2018,no_run
 #[get("/")]

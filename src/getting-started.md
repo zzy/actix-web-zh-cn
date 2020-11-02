@@ -26,17 +26,17 @@ cd hello-world
 actix-web = "3"
 ```
 
-请求处理程序使用异步函数，接受零个或多个参数。这些参数可以从请求中提取（参见 `FromRequest` trait），并返回可以转换为 `HttpResponse` 的类型（参见 `Responder` trait）：
+请求 `handler` 使用异步函数，接受零个或多个参数。这些参数可以从请求中提取（参见 `FromRequest` trait），并返回可以转换为 `HttpResponse` 的类型（参见 `Responder` trait）：
 
 ```rust,edition2018,no_run,noplaypen
 {{#include ../examples/getting-started/src/main.rs:handlers}}
 ```
 
-请注意，其中一些处理程序因为使用内建宏的原因，直接附加了路由信息，从而允许你指定处理程序应该响应的方法和路径。你将在下面示例看到不使用路由宏的情况下，如何注册自定义路由。
+请注意，其中一些 `handler` 因为使用内建宏的原因，直接附加了路由信息，从而允许你指定 handler 应该响应的方法和路径。你将在下面示例看到不使用路由宏的情况下，如何注册自定义路由。
 
-接下来，创建 `App` 实例并注册请求处理程序。
+接下来，创建 `App` 实例并注册请求 `handler`。
 
-- 对于使用了路由宏的处理程序，使用 `App::service` 方法注册路由；
+- 对于使用了路由宏的 `handler`，使用 `App::service` 方法注册路由；
 - 对不使用路由宏而注册自定义路由的情况，使用 `App::route` 方法。
 
 最后，使用 `HttpServer` 启动应用程序，它将你的 `App` 实例作为“应用程序工厂”，以处理传入的请求。
