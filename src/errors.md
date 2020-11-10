@@ -37,86 +37,67 @@ fn index(_req: HttpRequest) -> io::Result<NamedFile> {
 
 已经实现 `ResponseError` trait 的外部类型，其完整清单请参见 [actix-web API 文档][responseerrorimpls]。
 
-## An example of a custom error response
+## 自定义错误响应的示例
 
-Here's an example implementation for `ResponseError`, using the [derive_more] crate
-for declarative error enums.
+下属代码是实现了 `ResponseError` trait 的示例，它使用 [derive_more] crate 来声明错误枚举。
 
 ```rust,edition2018,no_run,noplaypen
 {{#include ../examples/errors/src/main.rs:response-error}}
 ```
 
-`ResponseError` has a default implementation for `error_response()` that will render a _500_
-(internal server error), and that's what will happen when the `index` handler executes above.
+`ResponseError` 有一个默认的 `error_response()` 实现，它将渲染一个 _HTTP-500_ 错误（内部服务器错误）。上文示例代码中，当我们执行 `index` handler 时，就会发生这种 _HTTP-500_ 错误。
 
-Override `error_response()` to produce more useful results:
+`error_response()` 方法可以重写，以生成更有用的结果：
 
 ```rust,edition2018,no_run,noplaypen
 {{#include ../examples/errors/src/override_error.rs:override}}
 ```
 
-# Error helpers
+# 错误助手
 
-Actix-web provides a set of error helper functions that are useful for generating specific HTTP
-error codes from other errors. Here we convert `MyError`, which doesn't implement the
-`ResponseError` trait, to a _400_ (bad request) using `map_err`:
+actix-web 提供了一系列错误助手（错误帮助程序）函数。在从其它错误生成特定的 HTTP 错误代码时，这些函数对于非常有用。下文的示例中，结构体 `MyError` 并未实现 `ResponseError` trait，我们使用 `map_err` 函数将其转换为 _HTTP-400_ 错误（错误请求）：
 
 ```rust,edition2018,no_run,noplaypen
 {{#include ../examples/errors/src/helpers.rs:helpers}}
 ```
 
-See the [API documentation for actix-web's `error` module][actixerror] for a full list of available
-error helpers.
+有关可用的错误帮助程序的完整列表，请参阅[actix-web 中 `error` 模块的 API 文档][actixerror]。
 
-# Error logging
+# 错误日志
 
-Actix logs all errors at the `WARN` log level. If an application's log level is set to `DEBUG` and
-`RUST_BACKTRACE` is enabled, the backtrace is also logged. These are configurable with environmental
-variables:
+在 `WARN` 日志级别，actix 记录所有错误。如果应用程序的日志级别设置为 `DEBUG`，并且启用了回溯功能 `RUST_BACKTRACE`，则回溯日志也会被记录。这些可通过环境变量进行配置：
 
 ```
 >> RUST_BACKTRACE=1 RUST_LOG=actix_web=debug cargo run
 ```
 
-The `Error` type uses the cause's error backtrace if available. If the underlying failure does not
-provide a backtrace, a new backtrace is constructed pointing to the point where the conversion
-occurred (rather than the origin of the error).
+可用情况下，`Error` 类型会使用具体请求的错误回溯。如果是底层失败而没有提供回溯，则会构造一个新的回溯，指向发生错误转换的位置（而不是错误的起源）。
 
-# Recommended practices in error handling
+# 推荐的错误处理方式
 
-It might be useful to think about dividing the errors an application produces into two broad groups:
-those which are intended to be be user-facing, and those which are not.
+考虑将应用程序产生的错误分为两大类：面向用户的错误、不面向用户的错误。
 
-An example of the former is that I might use failure to specify a `UserError` enum which
-encapsulates a `ValidationError` to return whenever a user sends bad input:
+面向用户的错误的一个例子：我们可以为可能发生的失败情形，指定一个 `UserError` 枚举，该枚举封装了 `ValidationError`，以便于在用户发送错误的输入时，返回验证信息：
 
 ```rust,edition2018,no_run,noplaypen
 {{#include ../examples/errors/src/recommend_one.rs:recommend-one}}
 ```
 
-This will behave exactly as intended because the error message defined with `display` is written
-with the explicit intent to be read by a user.
+这将完全按照预期的方式运行，因为使用 `display` 定义的错误消息，其编写的明确意图即是为了用户读取。
 
-However, sending back an error's message isn't desirable for all errors -- there are many failures
-that occur in a server environment where we'd probably want the specifics to be hidden from the
-user. For example, if a database goes down and client libraries start producing connect timeout
-errors, or if an HTML template was improperly formatted and errors when rendered. In these cases, it
-might be preferable to map the errors to a generic error suitable for user consumption.
+然而，并不是所有错误都需要发回错误消息——在服务器环境中会发生许多错误，我们可能希望对用户隐藏细节。例如，如果数据库关闭，客户端会产生连接超时错误；或者 HTML 模板格式不正确，并且在呈现时出错。在这些情况下，最好将错误映射为适合用户处理的通用错误。
 
-Here's an example that maps an internal error to a user-facing `InternalError` with a custom
-message:
+下面的示例代码中，使用自定义消息将内部错误映射为面向用户的 `InternalError`：
 
 ```rust,edition2018,no_run,noplaypen
 {{#include ../examples/errors/src/recommend_two.rs:recommend-two}}
 ```
 
-By dividing errors into those which are user facing and those which are not, we can ensure that we
-don't accidentally expose users to errors thrown by application internals which they weren't meant
-to see.
+通过将错误分为面向用户的错误和不面向用户的错误，我们可以确保不会意外地将应用程序内部错误暴露给用户——这些错误是用户不希望看到的。
 
-# Error Logging
+# 记录错误
 
-This is a basic example using `middleware::Logger`:
+使用日志中间件 `middleware::Logger` 记录错误日志的示例：
 
 ```rust,edition2018,no_run,noplaypen
 {{#include ../examples/errors/src/logging.rs:logging}}
