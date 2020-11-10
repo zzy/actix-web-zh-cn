@@ -37,7 +37,7 @@ fn index(_req: HttpRequest) -> io::Result<NamedFile> {
 
 已经实现 `ResponseError` trait 的外部类型，其完整清单请参见 [actix-web API 文档][responseerrorimpls]。
 
-## 自定义错误响应的示例
+## 自定义错误响应
 
 下属代码是实现了 `ResponseError` trait 的示例，它使用 [derive_more] crate 来声明错误枚举。
 
@@ -73,7 +73,7 @@ actix-web 提供了一系列错误助手（错误帮助程序）函数。在从�
 
 可用情况下，`Error` 类型会使用具体请求的错误回溯。如果是底层失败而没有提供回溯，则会构造一个新的回溯，指向发生错误转换的位置（而不是错误的起源）。
 
-# 推荐的错误处理方式
+# 错误处理的推荐方式
 
 考虑将应用程序产生的错误分为两大类：面向用户的错误、不面向用户的错误。
 
