@@ -1,104 +1,63 @@
----
-title: URL Dispatch
-menu: docs_advanced
-weight: 190
----
-
 # URL 调度
 
-URL dispatch provides a simple way for mapping URLs to handler code using a simple pattern
-matching language. If one of the patterns matches the path information associated with a request,
-a particular handler object is invoked.
+> [url-dispatch.md](https://github.com/actix/actix-website/blob/master/content/docs/url-dispatch.md)
+> <br />
+> commit - e7ca7fddd7e642b985921f276bb4c53e5fd20a4e - 2020.09.21
 
-> A request handler is a function that accepts zero or more parameters that can be extracted
-> from a request (ie, [*impl FromRequest*][implfromrequest]) and returns a type that can
-> be converted into an HttpResponse (ie, [*impl Responder*][implresponder]).  More information
-> is available in the [handler section][handlersection].
+URL 调度提供了简便的方式以进行简单的模式匹配，将 URL 映射到 handler 代码。如果请求相关联的路径信息与一个模式匹配，则调用特定的 handler 对象。
 
-# Resource configuration
+> 请求 handler 是一个函数，它接受可以从请求中提取的零个或多个参数（即 [*impl FromRequest*][implfromrequest]），并返回可以转换为 HttpResponse（即 [*impl Responder*][implresponder]）的类型。更多信息请查阅 [handler 章节](./handlers.md)。
 
-Resource configuration is the act of adding a new resources to an application.  A resource
-has a name, which acts as an identifier to be used for URL generation.  The name also
-allows developers to add routes to existing resources.  A resource also has a pattern,
-meant to match against the *PATH* portion of a *URL* (the portion following the scheme and
-port, e.g. */foo/bar* in the *URL* *http://localhost:8080/foo/bar?q=value*).  It does not
-match against the *QUERY* portion (the portion that follows *?*, e.g. *q=value*
-in *http://localhost:8080/foo/bar?q=value*).
+# 资源配置
 
-The [*App::route()*][approute] method provides simple way of registering routes. This
-method adds a single route to application routing table. This method accepts a *path pattern*,
-*HTTP method* and a handler function. `route()` method could be called multiple times
-for the same path, in that case, multiple routes register for the same resource path.
+资源配置的作用是向应用程序添加新的资源。资源有用于 URL 生成的标识符作为名称，该名称允许开发人员向现有资源添加路由。资源也具有模式，用于匹配 *URL* 的部分*路径（PATH）*，即 scheme 和 port 之后的路径部分（如 *URL http://localhost:8080/foo/bar?q=value* 中的 */foo/bar* 部分）。但不匹配路径中的*查询（QUERY）*，即 *?* 后面的部分（如 *http://localhost:8080/foo/bar?q=value* 中的 *q=value*）。
+
+[*App::route()*][approute] 方法提供了简便的方式以便于注册路由。此方法用于向应用程序的路由表添加路由，并且接受*路径模式*、*HTTP 方法*，以及 handler 函数。对于相同的资源路径，可以多次调用 `route()` 方法，在这种情况下，多个路由注册为同一个资源路径。
 
 ```rust,edition2018,no_run,noplaypen
 {{#include ../examples/url-dispatch/src/main.rs:main}}
 ```
 
-While *App::route()* provides simple way of registering routes, to access complete resource
-configuration, a different method has to be used.  The [*App::service()*][appservice] method
-adds a single [resource][webresource] to application routing table. This method accepts a
-*path pattern*, guards, and one or more routes.
+尽管 *App::route()* 方法提供了简便的方式以便于注册路由，但要访问完整的资源配置，必须使用不同的方法。[*App::service()*][appservice] 方法将单个[资源][webresource]添加到应用程序的路由表中，该方法接受*路径模式*、卫语句（guards），以及一个或多个路由。
 
 ```rust,edition2018,no_run,noplaypen
 {{#include ../examples/url-dispatch/src/resource.rs:resource}}
 ```
 
-If a resource does not contain any route or does not have any matching routes, it
-returns *NOT FOUND* HTTP response.
+如果资源不包含任何路由，或没有任何匹配的路由，将返回 *NOT FOUND* HTTP 响应。
 
-## Configuring a Route
+## 路由配置
 
-Resource contains a set of routes. Each route in turn has a set of `guards` and a handler.
-New routes can be created with `Resource::route()` method which returns a reference
-to new *Route* instance. By default the *route* does not contain any guards, so matches
-all requests and the default handler is `HttpNotFound`.
+资源包含一系列路由。每个路由依次有一组 `卫语句（guards）` 和一个 handler。可以使用 `Resource::route()` 方法创建新路由，该方法返回对新路由 *Route* 实例的引用。默认情况下，路由不包含任何卫语句，因此可以匹配所有请求，其默认 handler 为 `HttpNotFound`。
 
-The application routes incoming requests based on route criteria which are defined during
-resource registration and route registration. Resource matches all routes it contains in
-the order the routes were registered via `Resource::route()`.
+基于资源注册与路由注册期间定义的路由标准，应用程序的路由传入请求。
+应用程序根据在资源注册和路由注册期间定义的路由条件路由传入的请求。根据 `Resource::route()` 方法注册路由的顺序，资源匹配它包含的所有路由。
 
-> A *Route* can contain any number of *guards* but only one handler.
+> 路由 *Route* 可含有任意多的*卫语句（guards）*， 但只能有一个 handler。
 
 ```rust,edition2018,no_run,noplaypen
 {{#include ../examples/url-dispatch/src/cfg.rs:cfg}}
 ```
 
-In this example, `HttpResponse::Ok()` is returned for *GET* requests if the request
-contains `Content-Type` header, the value of this header is *text/plain*, and path
-equals to `/path`.
+在这个示例中，如果 *GET* 请求包含 `Content-Type` 标头，则返回 `HttpResponse::Ok()`。此标头的值为 *text/plain*，路径为 `/path`。
 
-If a resource can not match any route, a "NOT FOUND" response is returned.
+如果资源无法匹配任何路由，则返回 "NOT FOUND" 响应。
 
-[*ResourceHandler::route()*][resourcehandler] returns a [*Route*][route] object. Route
-can be configured with a builder-like pattern. Following configuration methods are available:
+[*ResourceHandler::route()*][resourcehandler] 返回[*路由（Route）*][route]对象。可以使用类似于 builder 的模式来配置路由。可用配置方法如下：
 
-* [*Route::guard()*][routeguard] registers a new guard. Any number of guards can be
-  registered for each route.
-* [*Route::method()*][routemethod] registers a method guard. Any number of guards can be
-  registered for each route.
-* [*Route::to()*][routeto] registers an async handler function for this route.
-  Only one handler can be registered.  Usually handler registration is the last config operation.
+* [*Route::guard()*][routeguard] 注册一个新的卫语句（guard），每个路由可以注册任意数量的卫语句（guard）。
+* [*Route::method()*][routemethod] 注册一个方法作为卫语句（guard），每个路由可以注册任意数量的卫语句（guard）。
+* [*Route::to()*][routeto] 为路由注册一个异步 handler 函数，仅能注册一个 handler。通常 handler 注册是最后一个配置操作。
 
-# Route matching
+# 路由匹配
 
-The main purpose of route configuration is to match (or not match) the request's `path`
-against a URL path pattern. `path` represents the path portion of the URL that was requested.
+路由配置的主要目的是根据 URL 路径模式去匹配（或不匹配）请求的`路径（path）`。`路径（path）`表示被请求 URL 的路径部分。
 
-The way that *actix-web* does this is very simple. When a request enters the system,
-for each resource configuration declaration present in the system, actix checks
-the request's path against the pattern declared. This checking happens in the order that
-the routes were declared via `App::service()` method. If resource can not be found,
-the *default resource* is used as the matched resource.
+*actix-web* 中，路由配置的方法非常简单。当请求进入系统时，将自身向系统中的每个资源配置予以声明，actix 会根据声明的模式去检查请求的路径。根据 `App::service()` 方法所声明路由的顺序，检查工作依次进行。如果未找到资源，则匹配的资源为*默认资源*。
 
-When a route configuration is declared, it may contain route guard arguments. All route
-guards associated with a route declaration must be `true` for the route configuration to
-be used for a given request during a check. If any guard in the set of route guard
-arguments provided to a route configuration returns `false` during a check, that route is
-skipped and route matching continues through the ordered set of routes.
+当路由配置被声明时，可以包含路由卫语句参数。在检查期间，对于给定请求的路由配置来说，其与路由声明关联的所有路由卫语句都必须为 `true`。在检查期间，如果在提供给路由配置的路由卫语句参数集合中，有任意一个卫语句返回 `false`，则跳过该路由。然后，根据有序的路由集合，路由匹配将继续进行。
 
-If any route matches, the route matching process stops and the handler associated with
-the route is invoked. If no route matches after all route patterns are exhausted, a
-*NOT FOUND* response get returned.
+如果匹配到任何路由，则停止路由匹配进程，并调用与该路由关联的 handler。如果在用尽所有路由模式后，仍然没有路由匹配，则返回 *NOT FOUND* 响应。
 
 # Resource pattern syntax
 
@@ -256,7 +215,7 @@ A *scoped* path can contain variable path segments as resources. Consistent with
 un-scoped paths.
 
 You can get variable path segments from `HttpRequest::match_info()`.
-[`Path` extractor][pathextractor] also is able to extract scope level variable segments.
+[`Path` extractor](./extractors.md) also is able to extract scope level variable segments.
 
 # Match information
 
@@ -436,7 +395,6 @@ with `App::service()` method.
 {{#include ../examples/url-dispatch/src/dhandler.rs:default}}
 ```
 
-[handlersection]: ../handlers/
 [approute]: https://docs.rs/actix-web/3/actix_web/struct.App.html#method.route
 [appservice]: https://docs.rs/actix-web/3/actix_web/struct.App.html?search=#method.service
 [webresource]: https://docs.rs/actix-web/3/actix_web/struct.Resource.html
@@ -456,4 +414,3 @@ with `App::service()` method.
 [requestextensions]: https://docs.rs/actix-web/3/actix_web/struct.HttpRequest.html#method.extensions
 [implfromrequest]: https://docs.rs/actix-web/3/actix_web/trait.FromRequest.html
 [implresponder]: https://docs.rs/actix-web/3/actix_web/trait.Responder.html
-[pathextractor]: ../extractors

@@ -39,7 +39,7 @@ fn index(_req: HttpRequest) -> io::Result<NamedFile> {
 
 ## 自定义错误响应
 
-下属代码是实现了 `ResponseError` trait 的示例，它使用 [derive_more] crate 来声明错误枚举。
+下述代码是实现了 `ResponseError` trait 的示例，它使用 [derive_more] crate 来声明错误枚举。
 
 ```rust,edition2018,no_run,noplaypen
 {{#include ../examples/errors/src/main.rs:response-error}}
