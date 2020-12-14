@@ -1,10 +1,10 @@
----
-title: Requests
-menu: docs_advanced
-weight: 200
----
+# 请求
 
-# Content Encoding
+> [request.md](https://github.com/actix/actix-website/blob/master/content/docs/request.md)
+> <br />
+> commit - 4d8d53cea59bca095ca5c02ef81f0b1791736855 - 2020.09.12
+
+## Content Encoding
 
 Actix-web automatically *decompresses* payloads. The following codecs are supported:
 
@@ -20,7 +20,7 @@ Actix-web automatically *decompresses* payloads. The following codecs are suppor
 If request headers contain a `Content-Encoding` header, the request payload is decompressed
 according to the header value. Multiple codecs are not supported, i.e: `Content-Encoding: br, gzip`.
 
-# JSON Request
+## JSON Request
 
 There are several options for json body deserialization.
 
@@ -44,20 +44,20 @@ body first and then deserialize the json into an object.
 
 > A complete example for both options is available in [examples directory][examples].
 
-# Chunked transfer encoding
+## Chunked transfer encoding
 
 Actix automatically decodes *chunked* encoding. The [`web::Payload`][payloadextractor]
 extractor already contains the decoded byte stream. If the request payload is compressed
 with one of the supported compression codecs (br, gzip, deflate), then the byte stream
 is decompressed.
 
-# Multipart body
+## Multipart body
 
 Actix-web provides multipart stream support with an external crate, [`actix-multipart`][multipartcrate].
 
 > A full example is available in the [examples directory][multipartexample].
 
-# Urlencoded body
+## Urlencoded body
 
 Actix-web provides support for *application/x-www-form-urlencoded* encoded bodies with
 the [`web::Form`][formencoded] extractor which resolves to the deserialized instance. The
@@ -74,7 +74,7 @@ The *UrlEncoded* future can resolve into an error in several cases:
 {{#include ../examples/requests/src/urlencoded.rs:urlencoded}}
 ```
 
-# Streaming request
+## Streaming request
 
 *HttpRequest* is a stream of `Bytes` objects. It can be used to read the request
 body payload.

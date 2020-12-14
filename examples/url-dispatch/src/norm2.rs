@@ -5,7 +5,7 @@ fn index() -> HttpResponse {
     HttpResponse::Ok().body("Hello")
 }
 
-// <norm>
+// ANCHOR: norm
 use actix_web::{get, http::Method, middleware, web, App, HttpServer};
 
 #[actix_web::main]
@@ -20,4 +20,4 @@ async fn main() -> std::io::Result<()> {
     .run()
     .await
 }
-// </norm>
+// ANCHOR_END: norm

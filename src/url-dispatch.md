@@ -59,337 +59,266 @@ URL 调度提供了简便的方式以进行简单的模式匹配，将 URL 映�
 
 如果匹配到任何路由，则停止路由匹配进程，并调用与该路由关联的 handler。如果在用尽所有路由模式后，仍然没有路由匹配，则返回 *NOT FOUND* 响应。
 
-# Resource pattern syntax
+# 资源模式语法
 
-The syntax of the pattern matching language used by actix in the pattern
-argument is straightforward.
+在模式参数匹配中，actix 使用的模式匹配语法简单明确。
 
-The pattern used in route configuration may start with a slash character. If the pattern
-does not start with a slash character, an implicit slash will be prepended
-to it at matching time. For example, the following patterns are equivalent:
+在路由配置中，使用的模式可以以斜杠字符 `/` 开头。如果模式不是以斜杠字符 `/` 开头，匹配时则会在其前面加上一个隐式斜杠。例如，以下模式是等效的：
 
 ```
 {foo}/bar/baz
 ```
 
-and:
+以及：
 
 ```
 /{foo}/bar/baz
 ```
 
-A *variable part* (replacement marker) is specified in the form *{identifier}*,
-where this means "accept any characters up to the next slash character and use this
-as the name in the `HttpRequest.match_info()` object".
+*可变部分*（替换标记）以 *{id}* 的形式指定，这意味着——下一个斜杠字符 `/` 之前，接受任意字符，并将其用作 `HttpRequest.match_info()` 对象的名称。
 
-A replacement marker in a pattern matches the regular expression `[^{}/]+`.
+模式中的替换标记，匹配正则表达式 `[^{}/]+`。
 
-A match_info is the `Params` object representing the dynamic parts extracted from a
-*URL* based on the routing pattern. It is available as *request.match_info*. For example, the
-following pattern defines one literal segment (foo) and two replacement markers (baz, and bar):
+匹配信息（match_info）是 `Params` 对象，表示以路由模式为依据，从 *URL* 中提取的动态部分。匹配信息（match_info）也可以作为请求的匹配信息，如 *request.match_info*。下面示例模式中，定义了一个文本段（foo）和两个替换标记（baz 和 bar）：
 
 ```
 foo/{baz}/{bar}
 ```
 
-The above pattern will match these URLs, generating the following match information:
+此模式将匹配如下 URL，可生成以下匹配信息：
 
 ```
 foo/1/2        -> Params {'baz':'1', 'bar':'2'}
 foo/abc/def    -> Params {'baz':'abc', 'bar':'def'}
 ```
 
-It will not match the following patterns however:
+但是，下述模式不会被匹配：
 
 ```
 foo/1/2/        -> No match (trailing slash)
 bar/abc/def     -> First segment literal mismatch
 ```
 
-The match for a segment replacement marker in a segment will be done only up to
-the first non-alphanumeric character in the segment in the pattern. So, for instance,
-if this route pattern was used:
+在路径段正则模式中，替换标记仅匹配到路径段中的第一个非字母数字字符。例如，如果使用这种路由模式：
 
 ```
 foo/{name}.html
 ```
 
-The literal path */foo/biz.html* will match the above route pattern, and the match result
-will be `Params{'name': 'biz'}`. However, the literal path */foo/biz* will not match,
-because it does not contain a literal *.html* at the end of the segment represented
-by *{name}.html* (it only contains biz, not biz.html).
+文本路径 */foo/biz.html* 将匹配上面的路由模式，匹配结果为 `Params{'name': 'biz'}`。但是，文本路径 */foo/biz* 不会匹配，因为末尾未包含 *.html* 字段。
 
-To capture both segments, two replacement markers can be used:
+如果两种文本路径都要匹配，可以使用两个替换标记：
 
 ```
 foo/{name}.{ext}
 ```
 
-The literal path */foo/biz.html* will match the above route pattern, and the match
-result will be *Params{'name': 'biz', 'ext': 'html'}*. This occurs because there is a
-literal part of *.* (period) between the two replacement markers *{name}* and *{ext}*.
+文本路径 */foo/biz.html* 将匹配上面的路由模式，匹配结果为 *Params{'name': 'biz', 'ext': 'html'}*。这样写是因为在替换标记 *{name}* 和 *{ext}* 之间，存在一个文本部分 *.（点号）*。
 
-Replacement markers can optionally specify a regular expression which will be used to decide
-whether a path segment should match the marker. To specify that a replacement marker should
-match only a specific set of characters as defined by a regular expression, you must use a
-slightly extended form of replacement marker syntax. Within braces, the replacement marker
-name must be followed by a colon, then directly thereafter, the regular expression. The default
-regular expression associated with a replacement marker *[^/]+* matches one or more characters
-which are not a slash. For example, under the hood, the replacement marker *{foo}* can more
-verbosely be spelled as *{foo:[^/]+}*. You can change this to be an arbitrary regular expression
-to match an arbitrary sequence of characters, such as *{foo:\d+}* to match only digits.
+替换标记可以可选地指定一个正则表达式，该表达式将用于决定路径段是否应与替换标记匹配。要指定替换标记仅匹配正则表达式定义的特定字符集，必须对替换标记语法做一些形式上的扩展。在大括号 `{}` 中，替换标记名称后，必须跟随冒号 `:`，然后是正则表达式。与替换标记 *[^/]+* 关联的默认正则表达式，可匹配一个或多个非斜杠字符。例如，底层的替换标记 *{foo}* 可以更详细地写为 *{foo:[^/]+}*。你可以将此更改为具体的正则表达式，以匹配具体的字符序列。比如更改为 *{foo:\d+}*，将仅匹配数字。
 
-Segments must contain at least one character in order to match a segment replacement marker.
-For example, for the URL */abc/*:
+路径段必须至少包含一个字符，才能匹配路径的替换标记。例如，对于 URL 路径 */abc/*：
 
-* */abc/{foo}* will not match.
-* */{foo}/* will match.
+* */abc/{foo}* 不会匹配；
+* */{foo}/* 可以匹配。
 
-> **Note**: path will be URL-unquoted and decoded into valid unicode string before
-> matching pattern and values representing matched path segments will be URL-unquoted too.
+> **注意**：在匹配模式前，将对 URL 路径去除引号，并解码为有效的 unicode 字符串；且代表路径段的匹配值，也将是去除引号的 URL。
 
-So for instance, the following pattern:
+例如，对于如下模式：
 
 ```
 foo/{bar}
 ```
 
-When matching the following URL:
+在匹配如下 URL 时：
 
 ```
 http://example.com/foo/La%20Pe%C3%B1a
 ```
 
-The match dictionary will look like so (the value is URL-decoded):
+匹配字典如下所示（URL 解码后的值)：
 
 ```
 Params{'bar': 'La Pe\xf1a'}
 ```
 
-Literal strings in the path segment should represent the decoded value of the
-path provided to actix. You don't want to use a URL-encoded value in the pattern.
-For example, rather than this:
+路径段中的文本字符串代表路径的解码值，以提供给 actix。你不会希望在模式中使用 URL 编码值。例如，不是这样的 URL 编码值：
 
 ```
 /Foo%20Bar/{baz}
 ```
 
-You'll want to use something like this:
+你会希望使用这样的值：
 
 ```
 /Foo Bar/{baz}
 ```
 
-It is possible to get "tail match". For this purpose custom regex has to be used.
+但这样做有可能得到“尾部匹配（tail match）”，为此，必须使用自定义正则表达式。
 
 ```
 foo/{bar}/{tail:.*}
 ```
 
-The above pattern will match these URLs, generating the following match information:
+上述模式可匹配如下 URL，并生成如下匹配信息：
 
 ```
 foo/1/2/           -> Params{'bar':'1', 'tail': '2/'}
 foo/abc/def/a/b/c  -> Params{'bar':u'abc', 'tail': 'def/a/b/c'}
 ```
 
-# Scoping Routes
+# 作用域路由
 
-Scoping helps you organize routes sharing common root paths.  You can nest
-scopes within scopes.
+作用域可以帮助你组织路由，以共享共用的根路径。作用域可以嵌套。
 
-Suppose that you want to organize paths to endpoints used to view "Users". Such paths may include:
+比如，你希望组织一组路径，用于查看 "Users" 端资源。这些路径可能包括：
 
 - /users
 - /users/show
 - /users/show/{id}
 
-
-A scoped layout of these paths would appear as follows
+这些路径的作用域布局如下所示：
 
 ```rust,edition2018,no_run,noplaypen
 {{#include ../examples/url-dispatch/src/scope.rs:scope}}
 ```
 
-A *scoped* path can contain variable path segments as resources. Consistent with 
-un-scoped paths.
+*作用域* 路径可以包含可变路径段，与非作用域路径用法一致。
 
-You can get variable path segments from `HttpRequest::match_info()`.
-[`Path` extractor](./extractors.md) also is able to extract scope level variable segments.
+你可以使用 `HttpRequest::match_info()` 方法获取可变路径段，[`Path` 提取器](./extractors.md)也可以提取作用域层级的变量段。
 
-# Match information
+# 匹配信息
 
-All values representing matched path segments are available in [`HttpRequest::match_info`][matchinfo].
-Specific values can be retrieved with [`Path::get()`][pathget].
+所有代表路径段的匹配值，都可以使用 [`HttpRequest::match_info`][matchinfo] 方法获得。[`Path::get()`][pathget] 方法可用于检索特定值。
 
 ```rust,edition2018,no_run,noplaypen
 {{#include ../examples/url-dispatch/src/minfo.rs:minfo}}
 ```
 
-For this example for path '/a/1/2/', values v1 and v2 will resolve to "1" and "2".
+示例中的路径 '/a/1/2/'，其中的 v1 和 v2 两个值将被解析为 “1” 和 “2”。
 
-It is possible to create a `PathBuf` from a tail path parameter. The returned `PathBuf` is
-percent-decoded. If a segment is equal to "..", the previous segment (if
-any) is skipped.
+可以由路径尾部的参数创建 `PathBuf`，`PathBuf` 返回值经百分比解码（URL 解码）。如果分段是 `..`，则跳过前一个分段（如果存在）。
 
-For security purposes, if a segment meets any of the following conditions,
-an `Err` is returned indicating the condition met:
+出于安全目的，如果分段满足以下任一条件，则返回一个 `Err`，表示该条件已满足：
 
-* Decoded segment starts with any of: `.` (except `..`), `*`
-* Decoded segment ends with any of: `:`, `>`, `<`
-* Decoded segment contains any of: `/`
-* On Windows, decoded segment contains any of: '\'
-* Percent-encoding results in invalid UTF8.
+* 解码段的开头为（任一）：`.`（不包括 `..`），`*`
+* 解码段的结尾为（任一）：`:`，`>`，`<`
+* 解码段包含（任一）：`/`
+* Windows 环境，解码段包含（任一）：`\`
+* 百分比编码（URL 编码）导致的无效 UTF8。
 
-As a result of these conditions, a `PathBuf` parsed from request path parameter is
-safe to interpolate within, or use as a suffix of, a path without additional checks.
+基于上述条件，从请求路径参数解析的 `PathBuf`，可以安全地在路径内插入，或用作路径的后缀，而无需额外检查。
 
 ```rust,edition2018,no_run,noplaypen
 {{#include ../examples/url-dispatch/src/pbuf.rs:pbuf}}
 ```
 
-## Path information extractor
+## 路径信息提取
 
-Actix provides functionality for type safe path information extraction.  [*Path*][pathstruct]
-extracts information, destination type could be defined in several different forms. Simplest
-approach is to use `tuple` type. Each element in tuple must correspond to one element from
-path pattern. i.e. you can match path pattern `/{id}/{username}/` against
-`Path<(u32, String)>` type, but `Path<(String, String, String)>` type will always fail.
+actix 提供类型安全的路径信息提取的功能。使用 [*Path*][pathstruct] 结构体提取路径信息后，目标类型可以定义为几种不同的形式。最简单的方式是使用`元组（tuple）`类型，元组中的每个元素必须对应于路径模式中的一个元素。也就是说，你可以将路径模式 `/{id}/{username}/` 与类型 `Path<(u32, String)>` 成功匹配，但是与类型 `Path<(String, String, String)>` 的匹配就会失败。
 
 ```rust,edition2018,no_run,noplaypen
 {{#include ../examples/url-dispatch/src/path.rs:path}}
 ```
 
-It also possible to extract path pattern information to a struct. In this case,
-this struct must implement *serde's *`Deserialize` trait.
+也可以将路径模式信息提取到结构体中。下述示例中，结构体必须反序列化，实现 *serde* crate 的 `Deserialize` trait。
 
 ```rust,edition2018,no_run,noplaypen
 {{#include ../examples/url-dispatch/src/path2.rs:path}}
 ```
 
-[*Query*][query] provides similar functionality for request query parameters.
+[*Query*][query] 结构体为请求查询参数提供了类似的功能。
 
-# Generating resource URLs
+# 生成资源 URL
 
-Use the [*HttpRequest.url_for()*][urlfor] method to generate URLs based on resource
-patterns. For example, if you've configured a resource with the name "foo" and the
-pattern "{a}/{b}/{c}", you might do this:
+使用 [*HttpRequest.url_for()*][urlfor] 方法，生成基于资源模式的 URL。例如，如果您配置了一个名称为“foo”，且模式为“{a}/{b}/{c}”的资源，则可以执行以下操作：
 
 ```rust,edition2018,no_run,noplaypen
 {{#include ../examples/url-dispatch/src/urls.rs:url}}
 ```
 
-This would return something like the string *http://example.com/test/1/2/3* (at least if
-the current protocol and hostname implied http://example.com).  `url_for()` method
-returns [*Url object*][urlobj] so you can modify this url (add query parameters, anchor, etc).
-`url_for()` could be called only for *named* resources otherwise error get returned.
+这会返回类似 *http://example.com/test/1/2/3* 的字符串（协议和主机名仅为示例）。`url_for()` 返回结构体 [*Url 对象*][urlobj]，你可以对 url 进行修改（添加查询参数、锚点等）。只有`已命名`资源调用可以 `url_for()` 方法，否则返回错误。
 
-# External resources
+# 外部资源
 
-Resources that are valid URLs, can be registered as external resources. They are useful
-for URL generation purposes only and are never considered for matching at request time.
+有效的资源 URL，可以注册为外部资源。外部资源仅用于生成 URL，在请求时，从不考虑进行匹配。
 
 ```rust,edition2018,no_run,noplaypen
 {{#include ../examples/url-dispatch/src/url_ext.rs:ext}}
 ```
 
-# Path normalization and redirecting to slash-appended routes
+# 路径规范化，以及重定向到附加斜杠的路由
 
-By normalizing it means:
+路径规范化意味着：
 
-* To add a trailing slash to the path.
-* To replace multiple slashes with one.
+* 对路径附加尾部斜杠；
+* 规范路径中的斜杠，用一个斜杠替换连续的多个斜杠。
 
-The handler returns as soon as it finds a path that resolves correctly. The order of
-normalization conditions, if all are enabled, is 1) merge, 2) both merge and append and
-3) append. If the path resolves with at least one of those conditions, it will redirect
-to the new path.
+路径规范化处理程序一旦找到正确解析的路径，就会立刻返回。如果启用了所有规范化条件，则其顺序为：1）合并，2）合并和追加，以及 3）追加。如果路径至少在其中一个条件下解析，它将重定向到新路径。
 
 ```rust,edition2018,no_run,noplaypen
 {{#include ../examples/url-dispatch/src/norm.rs:norm}}
 ```
 
-In this example `//resource///` will be redirected to `/resource/`.
+示例中，`//resource///` 将会被重定向为 `/resource/`。
 
-In this example, the path normalization handler is registered for all methods,
-but you should not rely on this mechanism to redirect *POST* requests. The redirect of the
-slash-appending *Not Found* will turn a *POST* request into a GET, losing any
-*POST* data in the original request.
+上述示例中，为所有方法都注册了路径规范化处理程序，但你不应依赖于这种机制去重定向 *POST* 请求。附加斜杠的 *Not Found* 路径，其重定向会丢失原始请求中的所有 *POST* 数据，将 *POST* 请求转换为 GET 请求。
 
-It is possible to register path normalization only for *GET* requests only:
+可以仅对 *GET* 请求注册路径规范化处理程序：
 
 ```rust,edition2018,no_run,noplaypen
 {{#include ../examples/url-dispatch/src/norm2.rs:norm}}
 ```
 
-## 使用作用域前缀
+## 使用作用域前缀组合应用
 
-The `web::scope()` method allows to set a specific application scope.  This scope represents
-a resource prefix that will be prepended to all resource patterns added by the resource
-configuration. This can be used to help mount a set of routes at a different location
-than the included callable's author intended while still maintaining the same resource names.
+`web::scope()` 方法允许设置特定的应用程序作用域。此作用域表示一个资源前缀，该前缀将预置到由资源配置添加的所有资源模式中。这可以用来帮助装载一组路由到新的 URL 路径，而与其包含的可调用 URL 路径不同，同时仍保持相同的资源名称。
 
-For example:
+例如：
 
 ```rust,edition2018,no_run,noplaypen
 {{#include ../examples/url-dispatch/src/scope.rs:scope}}
 ```
 
-In the above example, the *show_users* route will have an effective route pattern of
-*/users/show* instead of */show* because the application's scope will be prepended
-to the pattern. The route will then only match if the URL path is */users/show*,
-and when the `HttpRequest.url_for()` function is called with the route name show_users,
-it will generate a URL with that same path.
+在上面的示例中，*show_users* 路由将具有有效路由模式 */users/show*，而不是 */show*，因为应用程序作用域将预先添加到路由模式中。只有当 URL 路径匹配 */users/show*，并且使用路由名称 `show_users` 调用 `HttpRequest.url_for()` 函数时，它将生成具有相同路径的 URL。
 
-# Custom route guard
+# 自定义路由卫语句
 
-You can think of a guard as a simple function that accepts a *request* object reference
-and returns *true* or *false*. Formally, a guard is any object that implements the
-[`Guard`][guardtrait] trait. Actix provides several predicates, you can check
-[functions section][guardfuncs] of API docs.
+可以将卫语句视作为一个简单的函数，它接受*请求* 对象引用，并返回 *true* 或 *false*。从形式上讲，卫语句是实现 [`Guard`][guardtrait] trait 的任何对象。actix 提供了几个断言，详细了解请可以查看 API 文档的[函数章节][guardfuncs]。
 
-Here is a simple guard that check that a request contains a specific *header*:
+下面示例是一个简单的卫语句，用于检查请求是否包含特定的*消息头* ：
 
 ```rust,edition2018,no_run,noplaypen
 {{#include ../examples/url-dispatch/src/guard.rs:guard}}
 ```
 
-In this example, *index* handler will be called only if request contains *CONTENT-TYPE* header.
+上述示例中，只有当请求包含 *CONTENT-TYPE* 消息头时，才会调用*index* handler。
 
-Guards can not access or modify the request object, but it is possible to store extra
-information in [request extensions][requestextensions].
+卫语句不能访问或修改请求对象，但是可以在[请求扩展][requestextensions]中存储额外的信息。
 
-## Modifying guard values
+## 修改卫语句的值
 
-You can invert the meaning of any predicate value by wrapping it in a `Not` predicate.
-For example, if you want to return "METHOD NOT ALLOWED" response for all methods
-except "GET":
+通过将断言值包裹在 `Not` 断言中，可以反转任何断言值的含义。例如，如果要为除 `GET` 之外的所有方法返回 `METHOD NOT ALLOWED` 响应：
 
 ```rust,edition2018,no_run,noplaypen
 {{#include ../examples/url-dispatch/src/guard2.rs:guard2}}
 ```
 
-The `Any` guard accepts a list of guards and matches if any of the supplied
-guards match. i.e:
+如果要匹配所提供卫语句列表中的任意一个，可以使用 `Any` 卫语句。即：
 
 ```rust
 guard::Any(guard::Get()).or(guard::Post())
 ```
 
-The `All` guard accepts a list of guard and matches if all of the supplied
-guards match. i.e:
+如果要匹配所提供的卫语句列表中的全部项，可以使用 `All` 卫语句。即：
 
 ```rust
 guard::All(guard::Get()).and(guard::Header("content-type", "plain/text"))
 ```
 
-# Changing the default Not Found response
+# 更改默认的 `Not Found` 响应
 
-If the path pattern can not be found in the routing table or a resource can not find matching
-route, the default resource is used. The default response is *NOT FOUND*.
-It is possible to override the *NOT FOUND* response with `App::default_service()`.
-This method accepts a *configuration function* same as normal resource configuration
-with `App::service()` method.
+如果在路由表中不能发现路径模式，或资源找不到可匹配的路由，则会使用默认资源。默认的响应是 *NOT FOUND*，我们可以使用 `App::default_service()` 方法重写 *NOT FOUND* 响应。此方法通过 `App::service()` 方法接受*配置函数*，与普通资源配置方法相同。
 
 ```rust,edition2018,no_run,noplaypen
 {{#include ../examples/url-dispatch/src/dhandler.rs:default}}
