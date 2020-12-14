@@ -1,15 +1,12 @@
----
-title: Testing
-menu: docs_advanced
-weight: 215
----
+# 测试
 
-# Testing
+> [testing.md](https://github.com/actix/actix-website/blob/master/content/docs/testing.md)
+> <br />
+> commit - 4d8d53cea59bca095ca5c02ef81f0b1791736855 - 2020.09.12
 
-Every application should be well tested. Actix-web provides tools to perform unit and
-integration tests.
+每个应用程序都应当经过良好的测试，actix-web 提供了用于执行单元和集成测试的工具。
 
-# Unit Tests
+## Unit Tests
 
 For unit testing, actix-web provides a request builder type.
 [*TestRequest*][testrequest] implements a builder-like pattern. You can generate a
@@ -19,7 +16,7 @@ For unit testing, actix-web provides a request builder type.
 {{#include ../examples/testing/src/main.rs:unit-tests}}
 ```
 
-# Integration tests
+## Integration tests
 
 There are a few methods for testing your application. Actix-web can be used
 to run the application with specific handlers in a real HTTP server.
@@ -44,7 +41,7 @@ the normal application. For example, you may need to initialize application stat
 {{#include ../examples/testing/src/integration_two.rs:integration-two}}
 ```
 
-# Stream response tests
+## Stream response tests
 
 If you need to test stream generation, it would be enough to call `take_body()` and convert a
 resulting [*ResponseBody*][responsebody] into a future and execute it, for example when testing
