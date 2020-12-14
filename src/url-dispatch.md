@@ -39,7 +39,7 @@ URL 调度提供了简便的方式以进行简单的模式匹配，将 URL 映�
 {{#include ../examples/url-dispatch/src/cfg.rs:cfg}}
 ```
 
-在这个示例中，如果 *GET* 请求包含 `Content-Type` 标头，则返回 `HttpResponse::Ok()`。此标头的值为 *text/plain*，路径为 `/path`。
+在这个示例中，如果 *GET* 请求包含 `Content-Type` 消息标头，则返回 `HttpResponse::Ok()`。此消息标头的值为 *text/plain*，路径为 `/path`。
 
 如果资源无法匹配任何路由，则返回 "NOT FOUND" 响应。
 
@@ -286,13 +286,13 @@ actix 提供类型安全的路径信息提取的功能。使用 [*Path*][pathstr
 
 可以将卫语句视作为一个简单的函数，它接受*请求* 对象引用，并返回 *true* 或 *false*。从形式上讲，卫语句是实现 [`Guard`][guardtrait] trait 的任何对象。actix 提供了几个断言，详细了解请可以查看 API 文档的[函数章节][guardfuncs]。
 
-下面示例是一个简单的卫语句，用于检查请求是否包含特定的*消息头* ：
+下面示例是一个简单的卫语句，用于检查请求是否包含特定的*消息标头*：
 
 ```rust,edition2018,no_run,noplaypen
 {{#include ../examples/url-dispatch/src/guard.rs:guard}}
 ```
 
-上述示例中，只有当请求包含 *CONTENT-TYPE* 消息头时，才会调用*index* handler。
+上述示例中，只有当请求包含 *CONTENT-TYPE* 消息标头时，才会调用*index* handler。
 
 卫语句不能访问或修改请求对象，但是可以在[请求扩展][requestextensions]中存储额外的信息。
 

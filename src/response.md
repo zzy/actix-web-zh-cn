@@ -1,10 +1,8 @@
----
-title: Responses
-menu: docs_advanced
-weight: 210
----
+# 响应
 
-# Response
+> [response.md](https://github.com/actix/actix-website/blob/master/content/docs/response.md)
+> <br />
+> commit - 47473dc4bbd1a54ef135bea5cac1d04590dba986 - 2020.09.19
 
 A builder-like pattern is used to construct an instance of `HttpResponse`.  `HttpResponse`
 provides several methods that return a `HttpResponseBuilder` instance, which implements
@@ -20,7 +18,7 @@ instance multiple times, the builder will panic.
 {{#include ../examples/responses/src/main.rs:builder}}
 ```
 
-# Content encoding
+## 内容编码
 
 Actix-web can automatically *compress* payloads with the [*Compress middleware*][compressmidddleware].
 The following codecs are supported:
@@ -77,7 +75,7 @@ negotiation.
 {{#include ../examples/responses/src/auto.rs:auto}}
 ```
 
-# JSON Response
+## JSON 响应
 
 The `Json` type allows to respond with well-formed JSON data: simply return a value of
 type `Json<T>` where `T` is the type of a structure to serialize into *JSON*.
