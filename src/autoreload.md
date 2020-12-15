@@ -4,21 +4,14 @@
 > <br />
 > commit - fa45d6e0376cf6299db25bf1e4d6a48a53516a6e - 2020.11.25
 
-在开发过程中，让cargo在更改时自动重新编译代码非常方便。这可以很容易地完成使用货物手表。
-
-
-
-During development it can be very handy to have cargo automatically recompile the code on changes.
-This can be accomplished very easily by using [`cargo-watch`].
+开发过程中，在代码修改时让 cargo 自动重新编译是非常方便的。这可以很容易地通过 [`cargo-watch`] 实现。
 
 ```sh
 cargo watch -x 'run --bin app'
 ```
 
-## Historical Note
+## 历史笔记
 
-An old version of this page recommended using a combination of systemfd and listenfd, but this has
-many gotchas and was difficult to integrate properly, especially when part of a broader development
-workflow. We consider [`cargo-watch`] to be sufficient for auto-reloading purposes.
+旧版本中，我们建议使用 systemfd 和 listenfd 的组合，但这有很多问题。尤其是在更广泛的开发工作流中，很难正确集成。我们认为，[`cargo-watch`] 足够实现自动重载目标。
 
 [`cargo-watch`]: https://github.com/passcod/cargo-watch

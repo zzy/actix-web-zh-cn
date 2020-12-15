@@ -1,18 +1,18 @@
----
-title: Databases
-menu: docs_patterns
-weight: 1010
----
+# 数据库
 
-# Async Options
+> [databases.md](https://github.com/actix/actix-website/blob/master/content/docs/databases.md)
+> <br />
+> commit - 4d8d53cea59bca095ca5c02ef81f0b1791736855 - 2020.09.12
 
-We have several example projects showing use of async database adapters:
+## 异步选项
+
+我们有几个示例项目展示了异步数据库适配器的使用：
 
 - SQLx: https://github.com/actix/examples/tree/master/sqlx_todo
 - Postgres: https://github.com/actix/examples/tree/master/async_pg
 - SQLite: https://github.com/actix/examples/tree/master/async_db
 
-# Diesel
+## Diesel
 
 The current version of Diesel (v1) does not support asynchronous operations, so it is important to
 use the [`web::block`][web-block] function to offload your database operations to the Actix runtime
