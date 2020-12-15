@@ -1,10 +1,8 @@
----
-title: Middleware
-menu: docs_advanced
-weight: 220
----
+# 中间价
 
-# Middleware
+> [middleware.md](https://github.com/actix/actix-website/blob/master/content/docs/middleware.md)
+> <br />
+> commit - 4d8d53cea59bca095ca5c02ef81f0b1791736855 - 2020.09.12
 
 Actix-web's middleware system allows us to add additional behavior to request/response
 processing.  Middleware can hook into an incoming request process, enabling us to modify

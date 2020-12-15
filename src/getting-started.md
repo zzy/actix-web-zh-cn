@@ -8,7 +8,7 @@
 
 如果你还未安装 Rust，推荐使用 `rustup` 来管理你的 Rust，详细参见[官方的 Rust 安装指南][rustguide]。
 
-actix-web 目前支持的最低支持为 Rust-1.42（MSRV），运行 `rustup update` 将更新到 Rust 的最新版本。本指南假设您运行的是 Rust-1.42 或更高版本。
+actix-web 目前支持的最低支持为 Rust-1.42（MSRV），运行 `rustup update` 将更新到 Rust 的最新版本。本指南假设你运行的是 Rust-1.42 或更高版本。
 
 ## 创建项目
 

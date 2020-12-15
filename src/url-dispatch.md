@@ -231,7 +231,7 @@ actix 提供类型安全的路径信息提取的功能。使用 [*Path*][pathstr
 
 # 生成资源 URL
 
-使用 [*HttpRequest.url_for()*][urlfor] 方法，生成基于资源模式的 URL。例如，如果您配置了一个名称为“foo”，且模式为“{a}/{b}/{c}”的资源，则可以执行以下操作：
+使用 [*HttpRequest.url_for()*][urlfor] 方法，生成基于资源模式的 URL。例如，如果你配置了一个名称为“foo”，且模式为“{a}/{b}/{c}”的资源，则可以执行以下操作：
 
 ```rust,edition2018,no_run,noplaypen
 {{#include ../examples/url-dispatch/src/urls.rs:url}}

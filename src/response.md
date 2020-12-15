@@ -4,11 +4,11 @@
 > <br />
 > commit - 47473dc4bbd1a54ef135bea5cac1d04590dba986 - 2020.09.19
 
-使用类似于构建器的模式构造 `HttpResponse` 实例。`HttpResponse` 提供了返回 `HttpResponseBuilder` 实例的几种方法，`HttpResponseBuilder` 实例实现了多种便捷方法用于生成响应。
+使用类似于 builder 的模式构造 `HttpResponse` 实例。`HttpResponse` 提供了返回 `HttpResponseBuilder` 实例的几种方法，`HttpResponseBuilder` 实例实现了多种便捷方法用于生成响应。
 
 > 可查看[文档][responsebuilder]中的类型描述。
 
-方法 `.body`、`.finish`，以及 `.json` 完成响应创建，并返回一个已构造的 *HttpResponse* 实例。如果在同一构造器实例上多次调用此方法，构造器将会抛出异常。
+方法 `.body`、`.finish`，以及 `.json` 完成响应创建，并返回一个已构造的 *HttpResponse* 实例。如果在同一个 builder 实例上多次调用此方法，builder 将会抛出异常。
 
 ```rust,edition2018,no_run,noplaypen
 {{#include ../examples/responses/src/main.rs:builder}}

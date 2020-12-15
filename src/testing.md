@@ -6,46 +6,37 @@
 
 每个应用程序都应当经过良好的测试，actix-web 提供了用于执行单元和集成测试的工具。
 
-## Unit Tests
+## 单元测试
 
-For unit testing, actix-web provides a request builder type.
-[*TestRequest*][testrequest] implements a builder-like pattern. You can generate a
-`HttpRequest` instance with `to_http_request()` and call your handler with it.
+对于单元测试，actix-web 提供了一个请求 builder 类型。[*TestRequest*][testrequest] 实现了一个类似于 builder 的模式。你可以使用 `to_http_request()` 生成 `HttpRequest` 实例，并用它调用 handler 函数。
 
 ```rust,edition2018,no_run,noplaypen
 {{#include ../examples/testing/src/main.rs:unit-tests}}
 ```
 
-## Integration tests
+## 集成测试
 
-There are a few methods for testing your application. Actix-web can be used
-to run the application with specific handlers in a real HTTP server.
+测试应用程序有多种方式。actix-web 可用于在真实 HTTP 服务器上运行具有指定处理程序的应用。
 
-`TestRequest::get()`, `TestRequest::post()` and other
-methods can be used to send requests to the test server.
+可以使用 `TestRequest::get()`、`TestRequest::post()`，以及其它方法，向测试服务器发送请求。
 
-To create a `Service` for testing, use the `test::init_service` method which accepts a
-regular `App` builder.
+要创建用于测试的 `Service`，使用 `test::init_service` 方法，它可以接受常规的 `App` 构建器。
 
-> Check the [API documentation][actixdocs] for more information.
+> 查阅 [API 文档][actixdocs]以了解更多信息。
 
 ```rust,edition2018,no_run,noplaypen
 {{#include ../examples/testing/src/integration_one.rs:integration-one}}
 ```
 
-If you need more complex application configuration, testing should be very similar to creating
-the normal application. For example, you may need to initialize application state. Create an
-`App` with a `data` method and attach state just like you would from a normal application.
+即使你需要更复杂的应用程序配置，测试也是与创建普通应用程序非常相似的。例如，你可能需要初始化应用程序状态，使用 `data` 方法创建 `App` 实例并附加状态，就像在普通应用程序中所做的一样。
 
 ```rust,edition2018,no_run,noplaypen
 {{#include ../examples/testing/src/integration_two.rs:integration-two}}
 ```
 
-## Stream response tests
+## 流响应测试
 
-If you need to test stream generation, it would be enough to call `take_body()` and convert a
-resulting [*ResponseBody*][responsebody] into a future and execute it, for example when testing
-[*Server Sent Events*][serversentevents].
+如果你需要测试流生成，只需调用 `take_body()` 并将结果 [*ResponseBody*][responsebody] 转换为 future，然后执行它。例如，下面示例测试[*服务器发送事件*][serversentevents]。
 
 ```rust,edition2018,no_run,noplaypen
 {{#include ../examples/testing/src/stream_response.rs:stream-response}}
