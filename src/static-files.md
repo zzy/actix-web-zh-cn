@@ -1,8 +1,8 @@
----
-title: Static Files
-menu: docs_advanced
-weight: 230
----
+# 静态文件
+
+> [static-files.md](https://github.com/actix/actix-website/blob/master/content/docs/static-files.md)
+> <br />
+> commit - 529bebcd66999fdd46e759712394c32e3bc0ed3a - 2020.02.11
 
 # Individual file
 
