@@ -21,6 +21,7 @@
     - [Websockets](./websockets.md)
     - [HTTP/2](./http2.md)
 - [范例](./patterns.md)
+    - [自动重载](./autoreload.md)
     - [数据库](./databases.md)
 - [架构图](./diagrams.md)
     - [Http 服务器初始化](./http_server_init.md)

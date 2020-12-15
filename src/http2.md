@@ -4,17 +4,16 @@
 > <br />
 > commit - 4d8d53cea59bca095ca5c02ef81f0b1791736855 - 2020.09.12
 
-`actix-web` automatically upgrades connections to *HTTP/2* if possible.
+`actix-web` 可自动升级连接协议为 *HTTP/2*。
 
-## Negotiation
+## 协商
 
-*HTTP/2* protocol over TLS without prior knowledge requires [TLS ALPN][tlsalpn].
+基于 TLS 的 *HTTP/2* 协议需要 [TLS ALPN][tlsalpn]。
 
 <!-- TODO: use rustls example -->
-> Currently, only `rust-openssl` has support.
+> 当前，仅有 `rust-openssl` 提供了支持。
 
-`alpn` negotiation requires enabling the feature. When enabled, `HttpServer` provides the
-[bind_openssl][bindopenssl] method.
+`alpn` 协商需要启用该功能。启用后，`HttpServer` 提供了 [bind_openssl][bindopenssl] 方法。
 
 ```toml
 [dependencies]
@@ -26,11 +25,9 @@ openssl = { version = "0.10", features = ["v110"] }
 {{#include ../examples/http2/src/main.rs:main}}
 ```
 
-Upgrades to *HTTP/2.0* schema described in [rfc section 3.2][rfcsection32] is not
-supported.  Starting *HTTP/2* with prior knowledge is supported for both clear text
-connection and tls connection. [rfc section 3.4][rfcsection34].
+不支持升级到 [rfc 章节 3.2][rfcsection32] 中描述的 *HTTP/2.0* 架构模式，但明文连接和 tls 连接都支持，需要在事先确定的情况下启动 *HTTP/2*。详见[rfc 章节 3.4][rfcsection34]。
 
-> Check out [examples/tls][examples] for a concrete example.
+> 查看 [examples/tls][examples] 以获取具体示例。
 
 [rfcsection32]: https://http2.github.io/http2-spec/#rfc.section.3.2
 [rfcsection34]: https://http2.github.io/http2-spec/#rfc.section.3.4
