@@ -6,31 +6,31 @@
 
 ## 架构总览
 
-After Server has started listening to all sockets, [`Accept`][Accept] and [`Worker`][Worker] are two main loops responsible for processing incoming client connections.
+在服务器开始监听所有套接口（socket）之后，[`Accept`][Accept] 和 [`Worker`][Worker] 是两个主要的循环，负责处理传入的客户端连接。
 
-Once connection accepted Application level protocol processing happens in a protocol specific [`Dispatcher`][Dispatcher] loop spawned from [`Worker`][Worker].
+一旦连接被接受，应用程序级别的协议处理将发生在指定协议的 [`Dispatcher`][Dispatcher] 循环，[`Dispatcher`][Dispatcher] 循环派生于 [`Worker`][Worker]。
 
-    Please note, below diagrams are outlining happy-path scenarios only.
+    请注意，下面的图表仅展示了“一路畅通”的理想场景。
 
-![](/img/diagrams/connection_overview.svg)
+![](./css/connection_overview.svg)
 
-### Accept loop in more detail
+### Accept 循环细节
 
-![](/img/diagrams/connection_accept.svg)
+![](./css/connection_accept.svg)
 
-Most of code implementation resides in [`actix-server`][server] crate for struct [`Accept`][Accept].
+参阅 [`actix-server`][server] crate，详细了解结构体 [`Accept`][Accept]。
 
-### Worker loop in more detail
+### Worker 循环细节
 
-![](/img/diagrams/connection_worker.svg)
+![](./css/connection_worker.svg)
 
-Most of code implementation resides in [`actix-server`][server] crate for struct [`Worker`][Worker].
+参阅 [`actix-server`][server] crate，详细了解结构体 [`Worker`][Worker]。
 
-### Request loop roughly
+### Request 循环概览
 
-![](/img/diagrams/connection_request.svg)
+![](./css/connection_request.svg)
 
-Most of code implementation for request loop resides in [`actix-web`][web] and [`actix-http`][http] crates.
+参阅 [`actix-web`][web] crate 和 [`actix-http`][http] crate，详细了解 Request 循环。
 
 
 [server]: https://crates.io/crates/actix-server
