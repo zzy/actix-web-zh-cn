@@ -1,11 +1,10 @@
----
-title: Connection Lifecycle
-menu: docs_architecture
-weight: 1030
----
+# URL 链接生命周期
 
+> [conn_lifecycle.md](https://github.com/actix/actix-website/blob/master/content/docs/conn_lifecycle.md)
+> <br />
+> commit - 69145efc1e401e3974f7957f186e55d1d7ab4860 - 2020.02.02
 
-# Architecture overview
+## 架构总览
 
 After Server has started listening to all sockets, [`Accept`][Accept] and [`Worker`][Worker] are two main loops responsible for processing incoming client connections.
 
@@ -15,19 +14,19 @@ Once connection accepted Application level protocol processing happens in a prot
 
 ![](/img/diagrams/connection_overview.svg)
 
-## Accept loop in more detail
+### Accept loop in more detail
 
 ![](/img/diagrams/connection_accept.svg)
 
 Most of code implementation resides in [`actix-server`][server] crate for struct [`Accept`][Accept].
 
-## Worker loop in more detail
+### Worker loop in more detail
 
 ![](/img/diagrams/connection_worker.svg)
 
 Most of code implementation resides in [`actix-server`][server] crate for struct [`Worker`][Worker].
 
-## Request loop roughly
+### Request loop roughly
 
 ![](/img/diagrams/connection_request.svg)
 

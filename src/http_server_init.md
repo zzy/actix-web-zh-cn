@@ -1,12 +1,12 @@
----
-title: HTTP Server Initialization
-menu: docs_architecture
-weight: 1020
----
+# HTTP 服务器初始化
 
-## Architecture overview
+> [http_server_init.md](https://github.com/actix/actix-website/blob/master/content/docs/http_server_init.md)
+> <br />
+> commit - 4d8d53cea59bca095ca5c02ef81f0b1791736855 - 2020.09.12
 
-Below is a diagram of HttpServer initialization, which happens on the following code
+## 架构总览
+
+下面的序列图是 HttpServer 初始化过程，处理代码如下：
 
 ```rust
 #[actix_web::main]
@@ -21,4 +21,4 @@ async fn main() -> std::io::Result<()> {
 }
 ```
 
-![](/img/diagrams/http_server.svg)
+![](./css/http_server.svg)
