@@ -1,12 +1,12 @@
----
-title: HTTP/2
-menu: docs_protocols
-weight: 250
----
+# HTTP/2
+
+> [http2.md](https://github.com/actix/actix-website/blob/master/content/docs/http2.md)
+> <br />
+> commit - 4d8d53cea59bca095ca5c02ef81f0b1791736855 - 2020.09.12
 
 `actix-web` automatically upgrades connections to *HTTP/2* if possible.
 
-# Negotiation
+## Negotiation
 
 *HTTP/2* protocol over TLS without prior knowledge requires [TLS ALPN][tlsalpn].
 
