@@ -1,8 +1,8 @@
----
-title: 
-menu: docs_protocols
-weight: 240
----
+# WebSockets
+
+> [websockets.md](https://github.com/actix/actix-website/blob/master/content/docs/websockets.md)
+> <br />
+> commit - 4d8d53cea59bca095ca5c02ef81f0b1791736855 - 2020.09.12
 
 Actix-web supports WebSockets with the `actix-web-actors` crate. It is possible to convert a
 request's `Payload` to a stream of [*ws::Message*][message] with a [*web::Payload*][payload]
