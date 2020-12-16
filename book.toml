@@ -1,8 +1,8 @@
 [book]
-title = "actix-web 开发指南 - actix-web 中文文档"
+title = "actix-web 中文文档 - Rust-Web 开发指南"
 authors = ["zzy"]
 language = "zh"
-description = "rust web 框架, actix-web 开发指南, actix-web 项目实战, actix-web 中文文档"
+description = "Rust Web 框架, actix-web 开发指南, actix-web 项目实战, actix-web 中文文档"
 src = "src"
 multilingual = true
 
