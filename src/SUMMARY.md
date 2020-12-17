@@ -20,7 +20,7 @@
 - [协议](./protocols.md)
     - [Websockets](./websockets.md)
     - [HTTP/2](./http2.md)
-- [范例](./patterns.md)
+- [模式](./patterns.md)
     - [自动重载](./autoreload.md)
     - [数据库](./databases.md)
 - [架构图](./diagrams.md)
